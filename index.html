@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tom Beton — Brutalist concrete, cast by hand</title>
+<meta name="description" content="Small brutalist objects cast one at a time in warm concrete. Bauhaus and minimalism, in something you can hold in one hand." />
+
+<!-- Google Fonts: Archivo (display/body) + Space Mono (metadata) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     TOM BETON — brutalist in structure, warm in material,
+     intimate in scale. Single-file, no libraries.
+     ============================================================ */
+
+  :root {
+    /* Palette — warm cement, never cold grey */
+    --concrete: #ACA599;   /* base / main background */
+    --paper:    #EAE4D7;   /* alternate backgrounds, cards */
+    --charcoal: #4A4640;   /* dark blocks, warm charcoal */
+    --ink:      #17140E;   /* primary text */
+    --rust:     #B5482A;   /* single accent — used sparingly */
+
+    --line: rgba(23, 20, 14, 0.28);   /* hard hairline on light */
+    --line-dark: rgba(234, 228, 215, 0.22); /* hairline on charcoal */
+
+    --shadow: 10px 10px 0 var(--ink);        /* hard offset shadow */
+    --shadow-sm: 6px 6px 0 var(--ink);
+
+    --maxw: 1200px;
+    --gutter: clamp(20px, 5vw, 64px);
+    --nav-h: 52px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Archivo', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--concrete);
+    line-height: 1.5;
+    font-size: 17px;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { margin: 0; line-height: 0.98; letter-spacing: -0.02em; }
+
+  a { color: inherit; }
+
+  img { max-width: 100%; display: block; }
+
+  /* ---------- shared type helpers ---------- */
+  .mono {
+    font-family: 'Space Mono', ui-monospace, monospace;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 0 22px;
+    display: inline-block;
+  }
+  .eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 26px;
+    height: 2px;
+    background: currentColor;
+    vertical-align: middle;
+    margin-right: 12px;
+    transform: translateY(-3px);
+  }
+
+  .display {
+    font-weight: 900;
+    font-size: clamp(2.6rem, 11vw, 6rem);
+    letter-spacing: -0.03em;
+  }
+
+  .h2 {
+    font-weight: 800;
+    font-size: clamp(1.9rem, 6.5vw, 3.4rem);
+  }
+
+  /* ---------- layout scaffolding (visible grid) ---------- */
+  .wrap {
+    width: 100%;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+  }
+
+  section { position: relative; }
+
+  .section-pad { padding-top: clamp(64px, 12vw, 128px); padding-bottom: clamp(64px, 12vw, 128px); }
+
+  /* Hard divider between sections */
+  .rule-top { border-top: 2px solid var(--ink); }
+
+  /* ============================================================
+     NAV — thin fixed bar
+     ============================================================ */
+  header.nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    z-index: 100;
+    background: var(--concrete);
+    border-bottom: 2px solid var(--ink);
+  }
+  .nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .stamp {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 2px solid var(--ink);
+    padding: 5px 9px;
+    white-space: nowrap;
+    background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 3vw, 32px);
+  }
+  .nav-links a {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 400;
+    white-space: nowrap;
+    padding: 2px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-links a:hover { border-bottom-color: var(--rust); color: var(--rust); }
+
+  main { padding-top: var(--nav-h); }
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .btns { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .btn {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 15px 24px;
+    border: 2px solid var(--ink);
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-secondary { background: transparent; color: var(--ink); }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+
+  /* ============================================================
+     PLACEHOLDER PIECE BLOCKS
+     ============================================================ */
+  .piece-ph {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--charcoal);
+    box-shadow: var(--shadow);
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    /* faint mould-grain so it reads as material, not a broken gap */
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 46px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 46px);
+  }
+  .piece-ph .ph-label {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--paper);
+    background: rgba(23,20,14,0.55);
+    padding: 8px 12px;
+    margin: 12px;
+    border: 1px solid rgba(234,228,215,0.4);
+  }
+  .piece-ph .ph-corner {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: rgba(234,228,215,0.6);
+    letter-spacing: 0.1em;
+  }
+  /* concrete-toned variant */
+  .piece-ph.tone-concrete { background-color: #8f887b; }
+  .piece-ph.tone-concrete .ph-label { color: var(--ink); background: rgba(234,228,215,0.7); border-color: rgba(23,20,14,0.4); }
+  .piece-ph.tone-concrete .ph-corner { color: rgba(23,20,14,0.5); }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  #hero { background: var(--concrete); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 8vw, 72px);
+    align-items: center;
+  }
+  .hero-sub {
+    font-size: clamp(1.05rem, 4vw, 1.35rem);
+    max-width: 34ch;
+    margin-top: 26px;
+    font-weight: 500;
+    color: rgba(23,20,14,0.85);
+  }
+  .hero-piece { max-width: 460px; width: 100%; margin: 0 auto; }
+  .hero-piece .piece-ph { aspect-ratio: 3 / 4; }
+
+  /* ============================================================
+     THE WORK — catalogue
+     ============================================================ */
+  #work { background: var(--paper); }
+  .work-intro { max-width: 46ch; margin-top: 20px; font-size: 1.05rem; font-weight: 500; }
+
+  .catalogue {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;                 /* hairline structural grid look */
+    background: var(--ink);   /* shows through as grid lines */
+    border: 2px solid var(--ink);
+    margin-top: 52px;
+  }
+  .work-item {
+    background: var(--paper);
+    padding: clamp(20px, 5vw, 34px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .work-item .piece-ph { aspect-ratio: 1 / 1; }
+  .work-spec { align-self: center; }
+  .work-index {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--rust);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .work-name {
+    font-weight: 800;
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
+    margin: 6px 0 16px;
+    letter-spacing: -0.02em;
+  }
+  .spec-table {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .spec-row .k { color: rgba(23,20,14,0.55); letter-spacing: 0.04em; text-transform: uppercase; font-size: 11px; }
+  .spec-row .v { text-align: right; font-weight: 700; }
+  .spec-row.price .v { color: var(--rust); }
+  .illustrative {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: rgba(23,20,14,0.5);
+    margin-top: 24px;
+    text-align: right;
+  }
+
+  /* ============================================================
+     THE WORKSHOP — charcoal
+     ============================================================ */
+  #workshop { background: var(--charcoal); color: var(--paper); }
+  #workshop .eyebrow, #workshop .h2 { color: var(--paper); }
+  .workshop-body { max-width: 56ch; margin-top: 20px; font-size: 1.1rem; color: rgba(234,228,215,0.9); font-weight: 500; }
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 52px;
+    border: 2px solid var(--paper);
+  }
+  .step {
+    padding: 26px clamp(20px, 4vw, 30px);
+    border-bottom: 2px solid var(--paper);
+  }
+  .step:last-child { border-bottom: 0; }
+  .step .n {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--rust);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .step .w {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    margin: 8px 0 8px;
+    text-transform: uppercase;
+  }
+  .step .d { font-size: 0.98rem; color: rgba(234,228,215,0.82); font-weight: 500; }
+
+  /* ============================================================
+     THE MAKER
+     ============================================================ */
+  #maker { background: var(--concrete); }
+  .maker-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(36px, 7vw, 64px);
+    align-items: center;
+  }
+  .maker-body { max-width: 50ch; margin-top: 20px; font-size: 1.08rem; font-weight: 500; color: rgba(23,20,14,0.88); }
+  .maker-name { margin-top: 6px; }
+  .maker-portrait { max-width: 420px; width: 100%; }
+  .maker-portrait .piece-ph { aspect-ratio: 4 / 5; background-color: #7d766a; }
+
+  /* ============================================================
+     ACQUIRE / FOOTER
+     ============================================================ */
+  #acquire { background: var(--paper); }
+  .acquire-lead { max-width: 48ch; margin-top: 20px; font-size: 1.1rem; font-weight: 500; }
+
+  .signup { margin-top: 34px; max-width: 520px; }
+  .signup form { display: flex; flex-wrap: wrap; gap: 12px; }
+  .signup input[type="email"] {
+    flex: 1 1 220px;
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 14px;
+    padding: 15px 16px;
+    border: 2px solid var(--ink);
+    background: var(--concrete);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .signup input[type="email"]::placeholder { color: rgba(23,20,14,0.5); }
+  .signup input[type="email"]:focus { outline: none; border-color: var(--rust); box-shadow: 6px 6px 0 var(--rust); }
+  .signup .btn { flex: 0 0 auto; }
+  .signup-msg {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 13px;
+    margin-top: 16px;
+    color: var(--rust);
+    font-weight: 700;
+    min-height: 1em;
+    letter-spacing: 0.03em;
+  }
+
+  .channels {
+    margin-top: 44px;
+    padding-top: 32px;
+    border-top: 2px solid var(--ink);
+    max-width: 52ch;
+    font-size: 1.02rem;
+    font-weight: 500;
+  }
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .social a {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 11px 16px;
+    border: 2px solid var(--ink);
+    background: var(--concrete);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .social a:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--rust); color: var(--rust); }
+
+  /* footer bar closes in charcoal */
+  .footer-bar {
+    background: var(--charcoal);
+    color: rgba(234,228,215,0.75);
+    border-top: 2px solid var(--ink);
+  }
+  .footer-bar .wrap {
+    padding-top: 26px; padding-bottom: 26px;
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center;
+  }
+  .footer-bar .copy {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .footer-bar .stamp-sm {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid rgba(234,228,215,0.4);
+    padding: 4px 8px;
+  }
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .btn, .social a { transition: none; }
+  }
+
+  /* ============================================================
+     DESKTOP / TABLET SCALE-UP
+     ============================================================ */
+  @media (min-width: 720px) {
+    body { font-size: 18px; }
+
+    .hero-grid { grid-template-columns: 1.15fr 0.85fr; }
+
+    .work-item {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(28px, 4vw, 48px);
+    }
+
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .step { border-bottom: 0; border-right: 2px solid var(--paper); }
+    .step:last-child { border-right: 0; }
+
+    .maker-grid { grid-template-columns: 0.9fr 1.1fr; }
+    .maker-portrait { order: 2; }
+    .maker-text { order: 1; }
+  }
+
+  @media (min-width: 1000px) {
+    .catalogue {
+      grid-template-columns: 1fr 1fr;
+    }
+    /* first item spans full width as a "feature" plate */
+    .work-item:first-child { grid-column: 1 / -1; }
+    .work-item:first-child .piece-ph { aspect-ratio: 16 / 10; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="stamp" aria-label="Tom Beton — home">TOM BETON</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#workshop">Workshop</a>
+      <a href="#maker">Maker</a>
+      <a href="#acquire">Acquire</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section id="hero" class="section-pad">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-text reveal">
+          <p class="eyebrow" style="color: var(--rust);">RAW CONCRETE · CAST BY HAND</p>
+          <h1 class="display">Concrete you<br>want to touch.</h1>
+          <p class="hero-sub">Small brutalist objects, cast one at a time. Bauhaus and minimalism, in something you can hold in one hand.</p>
+          <div class="btns">
+            <a href="#work" class="btn btn-primary">See the work</a>
+            <a href="#acquire" class="btn btn-secondary">Where to buy</a>
+          </div>
+        </div>
+        <div class="hero-piece reveal">
+          <div class="piece-ph">
+            <span class="ph-corner mono">01 / CAST</span>
+            <span class="ph-label">BLOCK NO. 4 — CAST PLATE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE WORK ================= -->
+  <section id="work" class="section-pad rule-top">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">THE WORK</p>
+        <h2 class="h2">Each one cast, cured,<br>and finished by hand.</h2>
+        <p class="work-intro">No two are identical. The mold leaves its own marks, and I leave mine.</p>
+      </div>
+
+      <div class="catalogue reveal">
+
+        <!-- 1 -->
+        <article class="work-item">
+          <div class="piece-ph tone-concrete">
+            <span class="ph-corner mono">NO. 4</span>
+            <span class="ph-label">BLOCK NO. 4</span>
+          </div>
+          <div class="work-spec">
+            <div class="work-index mono">PIECE 01</div>
+            <h3 class="work-name">BLOCK NO. 4</h3>
+            <div class="spec-table">
+              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, sealed</span></div>
+              <div class="spec-row"><span class="k">Dimensions</span><span class="v">8 × 8 × 6 cm</span></div>
+              <div class="spec-row"><span class="k">Weight</span><span class="v">900 g</span></div>
+              <div class="spec-row"><span class="k">Edition</span><span class="v">Made to order</span></div>
+              <div class="spec-row price"><span class="k">Price</span><span class="v">€48</span></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="work-item">
+          <div class="piece-ph">
+            <span class="ph-corner mono">T-01</span>
+            <span class="ph-label">TOWER 01</span>
+          </div>
+          <div class="work-spec">
+            <div class="work-index mono">PIECE 02</div>
+            <h3 class="work-name">TOWER 01</h3>
+            <div class="spec-table">
+              <div class="spec-row"><span class="k">Material</span><span class="v">Raw grey concrete</span></div>
+              <div class="spec-row"><span class="k">Dimensions</span><span class="v">5 × 5 × 14 cm</span></div>
+              <div class="spec-row"><span class="k">Weight</span><span class="v">1.1 kg</span></div>
+              <div class="spec-row"><span class="k">Use</span><span class="v">Incense holder</span></div>
+              <div class="spec-row price"><span class="k">Price</span><span class="v">€62</span></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="work-item">
+          <div class="piece-ph tone-concrete">
+            <span class="ph-corner mono">VSL</span>
+            <span class="ph-label">VESSEL</span>
+          </div>
+          <div class="work-spec">
+            <div class="work-index mono">PIECE 03</div>
+            <h3 class="work-name">VESSEL</h3>
+            <div class="spec-table">
+              <div class="spec-row"><span class="k">Material</span><span class="v">Terracotta-tinted concrete</span></div>
+              <div class="spec-row"><span class="k">Dimensions</span><span class="v">11 × 11 × 9 cm</span></div>
+              <div class="spec-row"><span class="k">Weight</span><span class="v">1.4 kg</span></div>
+              <div class="spec-row"><span class="k">Use</span><span class="v">Planter or catchall</span></div>
+              <div class="spec-row price"><span class="k">Price</span><span class="v">€74</span></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="work-item">
+          <div class="piece-ph">
+            <span class="ph-corner mono">×2</span>
+            <span class="ph-label">TWO FORMS</span>
+          </div>
+          <div class="work-spec">
+            <div class="work-index mono">PIECE 04</div>
+            <h3 class="work-name">TWO FORMS</h3>
+            <div class="spec-table">
+              <div class="spec-row"><span class="k">Material</span><span class="v">Raw concrete</span></div>
+              <div class="spec-row"><span class="k">Dimensions</span><span class="v">12 × 10 × 12 cm each</span></div>
+              <div class="spec-row"><span class="k">Weight</span><span class="v">3.2 kg the pair</span></div>
+              <div class="spec-row"><span class="k">Edition</span><span class="v">Bookends, edition of 25</span></div>
+              <div class="spec-row price"><span class="k">Price</span><span class="v">€180</span></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="work-item">
+          <div class="piece-ph tone-concrete">
+            <span class="ph-corner mono">SLB</span>
+            <span class="ph-label">SLAB</span>
+          </div>
+          <div class="work-spec">
+            <div class="work-index mono">PIECE 05</div>
+            <h3 class="work-name">SLAB</h3>
+            <div class="spec-table">
+              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, ember</span></div>
+              <div class="spec-row"><span class="k">Dimensions</span><span class="v">24 × 14 × 2 cm</span></div>
+              <div class="spec-row"><span class="k">Weight</span><span class="v">1.6 kg</span></div>
+              <div class="spec-row"><span class="k">Use</span><span class="v">Tray</span></div>
+              <div class="spec-row price"><span class="k">Price</span><span class="v">€58</span></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <p class="illustrative reveal">Illustrative pieces for this concept.</p>
+    </div>
+  </section>
+
+  <!-- ================= THE WORKSHOP ================= -->
+  <section id="workshop" class="section-pad rule-top">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">THE WORKSHOP</p>
+        <h2 class="h2">Mold. Pour.<br>Cure. Release.</h2>
+        <p class="workshop-body">Every piece starts as a mold I build by hand. The concrete is mixed, poured, and left to cure for days — it can't be rushed. When it's ready, I break the mold away. What's left keeps every mark of how it was made. That's the point.</p>
+      </div>
+
+      <div class="steps reveal">
+        <div class="step">
+          <div class="n mono">01</div>
+          <div class="w">Mold</div>
+          <div class="d">Built by hand for each form.</div>
+        </div>
+        <div class="step">
+          <div class="n mono">02</div>
+          <div class="w">Pour</div>
+          <div class="d">Mixed and cast in small batches.</div>
+        </div>
+        <div class="step">
+          <div class="n mono">03</div>
+          <div class="w">Cure</div>
+          <div class="d">Days, not hours. It sets on its own time.</div>
+        </div>
+        <div class="step">
+          <div class="n mono">04</div>
+          <div class="w">Release</div>
+          <div class="d">The mold breaks away. The marks stay.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE MAKER ================= -->
+  <section id="maker" class="section-pad rule-top">
+    <div class="wrap">
+      <div class="maker-grid">
+        <div class="maker-text reveal">
+          <p class="eyebrow" style="color: var(--rust);">THE MAKER</p>
+          <h2 class="h2 maker-name">Tom Beton</h2>
+          <p class="maker-body">I make brutalist objects in concrete. Bauhaus and minimalism are where I started, and I never really left. I'm interested in the honest version of a thing — the material as it is, the joint left visible, the weight in your hand. Everything here is made by me, one at a time.</p>
+        </div>
+        <div class="maker-portrait reveal">
+          <div class="piece-ph">
+            <span class="ph-corner mono">STUDIO</span>
+            <span class="ph-label">HANDS AT THE MOLD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ACQUIRE / FOOTER ================= -->
+  <section id="acquire" class="section-pad rule-top">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">ACQUIRE</p>
+        <h2 class="h2">Take one home.</h2>
+        <p class="acquire-lead">New pieces are cast in small batches. Leave your email and I'll tell you when the next ones are ready.</p>
+
+        <div class="signup">
+          <form id="notify-form" novalidate>
+            <input type="email" id="notify-email" name="email" placeholder="you@email.com" aria-label="Email address" required />
+            <button type="submit" class="btn btn-primary">Notify me</button>
+          </form>
+          <p class="signup-msg mono" id="notify-msg" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="channels">
+          <p>Buy directly here, or through my Etsy shop if you'd rather — same pieces, same hands.</p>
+          <div class="social">
+            <a href="https://tombetonshop.etsy.com" target="_blank" rel="noopener noreferrer">Etsy →</a>
+            <a href="https://instagram.com/tombeton.insta" target="_blank" rel="noopener noreferrer">Instagram →</a>
+            <a href="https://tiktok.com/@tombeton.studio" target="_blank" rel="noopener noreferrer">TikTok →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div class="wrap">
+        <span class="copy mono">© Tom Beton — Brutalist concrete, cast by hand.</span>
+        <span class="stamp-sm">TB · CAST BY HAND</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* -------- Smooth scroll offset for fixed nav (native smooth + anchors) --------
+       Native CSS smooth-scroll handles the motion; we just correct the landing
+       position so section tops aren't hidden under the fixed bar. */
+    var nav = document.querySelector('.nav');
+    function navHeight() { return nav ? nav.offsetHeight : 52; }
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var id = link.getAttribute('href');
+        if (id === '#' || id.length < 2) return;
+        var target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight() + 2;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+        history.replaceState(null, '', id);
+      });
+    });
+
+    /* -------- Subtle scroll reveal -------- */
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in'); });
+    }
+
+    /* -------- Email capture (demo, no backend) -------- */
+    var form = document.getElementById('notify-form');
+    var email = document.getElementById('notify-email');
+    var msg = document.getElementById('notify-msg');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var val = (email.value || '').trim();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        if (!ok) {
+          msg.textContent = 'Enter a valid email and I’ll add you.';
+          email.focus();
+          return;
+        }
+        msg.textContent = 'Thanks — you’re on the list.';
+        form.reset();
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
