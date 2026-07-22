@@ -46,6 +46,28 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
+### 2026-07-22 — Color apagado en las piezas (primer pase) — 🟡 EN PR
+_Rama `claude/session-gwqrzq` → PR a `main` (pendiente de merge)._
+- Objetivo: quitar el look "super gris". Referencia: esculturas brutalistas de
+  rejilla con colores **apagados pero presentes** (mostaza, terracota, salvia,
+  azul polvo, granate).
+- Se amplía la paleta con una familia de tonos apagados: `--ochre #C79A45`,
+  `--sage #93A085`, `--dusty #869BA0`, `--maroon #7C3A31`, `--clay #C36A47`.
+  `--rust` se mantiene. El concreto/papel/carbón siguen igual: el color lo
+  cargan **las piezas**, el fondo se queda callado.
+- Nuevo sistema en los bloques placeholder:
+  - Variantes de tono (`.tone-ochre/sage/dusty/clay/maroon/rust`) con etiquetas
+    que ajustan su color según el tono sea claro u oscuro.
+  - Marcas geométricas planas (`.mark` → `circle`, `block`, `bars`, `bar`) con
+    utilidades de color (`.fill-*`), que evocan las composiciones de las
+    esculturas de referencia.
+- Asignación por pieza: Hero = ocre + círculo óxido · BLOCK NO. 4 = ocre +
+  bloque granate · TOWER 01 = azul polvo + barras granate · VESSEL = clay +
+  bloque crema · TWO FORMS = salvia + bloque clay/barra granate · SLAB = granate
+  + barras ocre.
+- Sin tocar estructura, tipografía ni JS. Sigue siendo un solo `index.html`.
+- Primer pase deliberadamente "a criterio"; Adrián ajusta tonos/asignaciones.
+
 ### 2026-07-22 — PR #1 · Sitio inicial + reglas del proyecto — ✅ MERGEADO
 _Estado: mergeado a `main` y desplegado en Vercel._
 - Se construye `index.html`: sitio de demostración para Tom Beton, escultor
