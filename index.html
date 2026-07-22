@@ -23,7 +23,15 @@
     --paper:    #EAE4D7;   /* alternate backgrounds, cards */
     --charcoal: #4A4640;   /* dark blocks, warm charcoal */
     --ink:      #17140E;   /* primary text */
-    --rust:     #B5482A;   /* single accent — used sparingly */
+    --rust:     #B5482A;   /* warm accent — terracotta / ember */
+
+    /* Muted colour family — dusty, never loud. The pieces carry the colour;
+       the concrete around them stays quiet. */
+    --ochre:    #C79A45;   /* mustard / ochre */
+    --sage:     #93A085;   /* muted green */
+    --dusty:    #869BA0;   /* dusty blue */
+    --maroon:   #7C3A31;   /* deep brick red */
+    --clay:     #C36A47;   /* soft terracotta */
 
     --line: rgba(23, 20, 14, 0.28);   /* hard hairline on light */
     --line-dark: rgba(234, 228, 215, 0.22); /* hairline on charcoal */
@@ -225,10 +233,73 @@
     color: rgba(234,228,215,0.6);
     letter-spacing: 0.1em;
   }
+  /* ---- colour tones for the pieces (the art carries the colour) ---- */
   /* concrete-toned variant */
   .piece-ph.tone-concrete { background-color: #8f887b; }
-  .piece-ph.tone-concrete .ph-label { color: var(--ink); background: rgba(234,228,215,0.7); border-color: rgba(23,20,14,0.4); }
-  .piece-ph.tone-concrete .ph-corner { color: rgba(23,20,14,0.5); }
+
+  .piece-ph.tone-ochre  { background-color: var(--ochre); }
+  .piece-ph.tone-sage   { background-color: var(--sage); }
+  .piece-ph.tone-dusty  { background-color: var(--dusty); }
+  .piece-ph.tone-clay   { background-color: var(--clay); }
+  .piece-ph.tone-maroon { background-color: var(--maroon); }
+  .piece-ph.tone-rust   { background-color: var(--rust); }
+
+  /* light tones read on dark ink labels; dark tones keep paper labels */
+  .piece-ph.tone-concrete .ph-label,
+  .piece-ph.tone-ochre .ph-label,
+  .piece-ph.tone-sage .ph-label,
+  .piece-ph.tone-dusty .ph-label {
+    color: var(--ink); background: rgba(234,228,215,0.7); border-color: rgba(23,20,14,0.4);
+  }
+  .piece-ph.tone-concrete .ph-corner,
+  .piece-ph.tone-ochre .ph-corner,
+  .piece-ph.tone-sage .ph-corner,
+  .piece-ph.tone-dusty .ph-corner {
+    color: rgba(23,20,14,0.55);
+  }
+
+  /* ---- geometric marks: flat muted shapes, echoing the wall pieces ---- */
+  .piece-ph .mark {
+    position: absolute;
+    pointer-events: none;
+  }
+  /* offset square block */
+  .mark.block {
+    width: 42%; height: 42%;
+    left: 14%; top: 16%;
+  }
+  /* circle */
+  .mark.circle {
+    width: 46%; aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    left: 27%; top: 20%;
+  }
+  /* vertical bars */
+  .mark.bars {
+    left: 16%; top: 18%;
+    width: 54%; height: 40%;
+    background:
+      repeating-linear-gradient(90deg,
+        currentColor 0 10px, transparent 10px 26px);
+  }
+  /* short offset bar */
+  .mark.bar {
+    width: 16%; height: 34%;
+    right: 20%; top: 24%;
+  }
+  /* colour utility for marks (uses text colour so bars can inherit) */
+  .fill-ochre  { background-color: var(--ochre); color: var(--ochre); }
+  .fill-sage   { background-color: var(--sage); color: var(--sage); }
+  .fill-dusty  { background-color: var(--dusty); color: var(--dusty); }
+  .fill-clay   { background-color: var(--clay); color: var(--clay); }
+  .fill-maroon { background-color: var(--maroon); color: var(--maroon); }
+  .fill-rust   { background-color: var(--rust); color: var(--rust); }
+  .fill-paper  { background-color: var(--paper); color: var(--paper); }
+  .fill-ink    { background-color: var(--ink); color: var(--ink); }
+  /* bars use only their text colour, no solid fill box */
+  .mark.bars.fill-ochre, .mark.bars.fill-sage, .mark.bars.fill-dusty,
+  .mark.bars.fill-clay, .mark.bars.fill-maroon, .mark.bars.fill-rust,
+  .mark.bars.fill-paper, .mark.bars.fill-ink { background-color: transparent; }
 
   /* ============================================================
      HERO
@@ -527,7 +598,8 @@
           </div>
         </div>
         <div class="hero-piece reveal">
-          <div class="piece-ph">
+          <div class="piece-ph tone-ochre">
+            <span class="mark circle fill-rust"></span>
             <span class="ph-corner mono">01 / CAST</span>
             <span class="ph-label">BLOCK NO. 4 — CAST PLATE</span>
           </div>
@@ -549,7 +621,9 @@
 
         <!-- 1 -->
         <article class="work-item">
-          <div class="piece-ph tone-concrete">
+          <div class="piece-ph tone-ochre">
+            <span class="mark block fill-maroon"></span>
+            <span class="mark bar fill-rust"></span>
             <span class="ph-corner mono">NO. 4</span>
             <span class="ph-label">BLOCK NO. 4</span>
           </div>
@@ -568,7 +642,8 @@
 
         <!-- 2 -->
         <article class="work-item">
-          <div class="piece-ph">
+          <div class="piece-ph tone-dusty">
+            <span class="mark bars fill-maroon"></span>
             <span class="ph-corner mono">T-01</span>
             <span class="ph-label">TOWER 01</span>
           </div>
@@ -587,7 +662,8 @@
 
         <!-- 3 -->
         <article class="work-item">
-          <div class="piece-ph tone-concrete">
+          <div class="piece-ph tone-clay">
+            <span class="mark block fill-paper"></span>
             <span class="ph-corner mono">VSL</span>
             <span class="ph-label">VESSEL</span>
           </div>
@@ -606,7 +682,9 @@
 
         <!-- 4 -->
         <article class="work-item">
-          <div class="piece-ph">
+          <div class="piece-ph tone-sage">
+            <span class="mark block fill-clay"></span>
+            <span class="mark bar fill-maroon"></span>
             <span class="ph-corner mono">×2</span>
             <span class="ph-label">TWO FORMS</span>
           </div>
@@ -625,7 +703,8 @@
 
         <!-- 5 -->
         <article class="work-item">
-          <div class="piece-ph tone-concrete">
+          <div class="piece-ph tone-maroon">
+            <span class="mark bars fill-ochre"></span>
             <span class="ph-corner mono">SLB</span>
             <span class="ph-label">SLAB</span>
           </div>
