@@ -46,7 +46,8 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-22 — PR #1 · Sitio inicial + reglas del proyecto
+### 2026-07-22 — PR #1 · Sitio inicial + reglas del proyecto — ✅ MERGEADO
+_Estado: mergeado a `main` y desplegado en Vercel._
 - Se construye `index.html`: sitio de demostración para Tom Beton, escultor
   brutalista de concreto. Un solo archivo autocontenido (CSS + JS inline),
   Google Fonts como única dependencia externa. Mobile-first.
@@ -63,3 +64,5 @@ Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 - Comportamiento: scroll suave desde nav y botones, reveal sutil al hacer
   scroll, captura de email demo con mensaje en línea.
 - Se crea `progreso.md` con las reglas de trabajo y este registro.
+
+_Cierre de sesión: PR #1 mergeado. Fin de la primera sesión de trabajo._
