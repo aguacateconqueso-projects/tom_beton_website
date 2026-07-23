@@ -18,26 +18,29 @@
      ============================================================ */
 
   :root {
-    /* Palette — warm cement, never cold grey */
-    --concrete: #ACA599;   /* base / main background */
-    --paper:    #EAE4D7;   /* alternate backgrounds, cards */
-    --charcoal: #4A4640;   /* dark blocks, warm charcoal */
-    --ink:      #17140E;   /* primary text */
-    --rust:     #B5482A;   /* warm accent — terracotta / ember */
+    /* Palette — warm & dark, cream text. The hero orange relief stays. */
+    --concrete: #241E18;   /* main dark background */
+    --paper:    #F1E0C5;   /* cream — primary text + structural lines/borders */
+    --charcoal: #2E2720;   /* alternate dark surface (cards, workshop, footer) */
+    --ink:      #14110C;   /* deepest dark — text on light fills, hero grout */
+    --rust:     #C34A36;   /* warm accent — terracotta / ember */
 
-    /* Muted colour family — dusty, never loud. The pieces carry the colour;
-       the concrete around them stays quiet. */
-    --ochre:    #C79A45;   /* mustard / ochre */
-    --sage:     #93A085;   /* muted green */
-    --dusty:    #869BA0;   /* dusty blue */
+    /* Muted palette family — the pieces carry the colour. Names kept for
+       backward-compat with existing tone/fill classes; values updated to the
+       new palette (tan · sage · purple), plus two warm reds that harmonise. */
+    --ochre:    #C9B79C;   /* tan / sand   (was ochre) */
+    --sage:     #71816D;   /* muted green */
+    --dusty:    #B47EB3;   /* muted purple (was dusty blue) */
     --maroon:   #7C3A31;   /* deep brick red */
     --clay:     #C36A47;   /* soft terracotta */
+    --tan:      #C9B79C;
+    --purple:   #B47EB3;
 
-    --line: rgba(23, 20, 14, 0.28);   /* hard hairline on light */
-    --line-dark: rgba(234, 228, 215, 0.22); /* hairline on charcoal */
+    --line: rgba(241, 224, 197, 0.20);      /* cream hairline on dark */
+    --line-dark: rgba(241, 224, 197, 0.22); /* cream hairline (alt) */
 
-    --shadow: 10px 10px 0 var(--ink);        /* hard offset shadow */
-    --shadow-sm: 6px 6px 0 var(--ink);
+    --shadow: 10px 10px 0 rgba(241, 224, 197, 0.16);  /* soft cream offset */
+    --shadow-sm: 6px 6px 0 var(--paper);              /* hard cream offset */
 
     --maxw: 1200px;
     --gutter: clamp(20px, 5vw, 64px);
@@ -54,7 +57,7 @@
   body {
     margin: 0;
     font-family: 'Archivo', system-ui, sans-serif;
-    color: var(--ink);
+    color: var(--paper);
     background: var(--concrete);
     line-height: 1.5;
     font-size: 17px;
@@ -135,7 +138,7 @@
   .section-pad { padding-top: clamp(64px, 12vw, 128px); padding-bottom: clamp(64px, 12vw, 128px); }
 
   /* Hard divider between sections */
-  .rule-top { border-top: 2px solid var(--ink); }
+  .rule-top { border-top: 2px solid var(--paper); }
 
   /* ============================================================
      NAV — thin fixed bar
@@ -146,7 +149,7 @@
     height: var(--nav-h);
     z-index: 100;
     background: var(--concrete);
-    border-bottom: 2px solid var(--ink);
+    border-bottom: 2px solid var(--paper);
   }
   .nav-inner {
     height: 100%;
@@ -168,7 +171,8 @@
     padding: 5px 9px;
     white-space: nowrap;
     background: var(--paper);
-    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--rust);
   }
   .nav-links {
     display: flex;
@@ -203,16 +207,16 @@
     font-weight: 700;
     text-decoration: none;
     padding: 15px 24px;
-    border: 2px solid var(--ink);
+    border: 2px solid var(--paper);
     display: inline-block;
     cursor: pointer;
     transition: transform 0.12s ease, box-shadow 0.12s ease;
     box-shadow: var(--shadow-sm);
   }
-  .btn-primary { background: var(--ink); color: var(--paper); }
-  .btn-secondary { background: transparent; color: var(--ink); }
-  .btn:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
-  .btn:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+  .btn-primary { background: var(--paper); color: var(--ink); }
+  .btn-secondary { background: transparent; color: var(--paper); }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--paper); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--paper); }
 
   /* ============================================================
      PLACEHOLDER PIECE BLOCKS
@@ -222,7 +226,7 @@
     aspect-ratio: 4 / 5;
     background: var(--charcoal);
     box-shadow: var(--shadow);
-    border: 2px solid var(--ink);
+    border: 2px solid var(--paper);
     display: flex;
     align-items: flex-end;
     overflow: hidden;
@@ -400,19 +404,19 @@
   /* ============================================================
      THE WORK — catalogue
      ============================================================ */
-  #work { background: var(--paper); }
+  #work { background: var(--concrete); }
   .work-intro { max-width: 46ch; margin-top: 20px; font-size: 1.05rem; font-weight: 500; }
 
   .catalogue {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2px;                 /* hairline structural grid look */
-    background: var(--ink);   /* shows through as grid lines */
-    border: 2px solid var(--ink);
+    gap: 2px;                   /* hairline structural grid look */
+    background: var(--paper);   /* cream lines show through on dark */
+    border: 2px solid var(--paper);
     margin-top: 52px;
   }
   .work-item {
-    background: var(--paper);
+    background: var(--charcoal);
     padding: clamp(20px, 5vw, 34px);
     display: grid;
     grid-template-columns: 1fr;
@@ -445,14 +449,14 @@
     padding: 9px 0;
     border-bottom: 1px solid var(--line);
   }
-  .spec-row .k { color: rgba(23,20,14,0.55); letter-spacing: 0.04em; text-transform: uppercase; font-size: 11px; }
+  .spec-row .k { color: rgba(241,224,197,0.55); letter-spacing: 0.04em; text-transform: uppercase; font-size: 11px; }
   .spec-row .v { text-align: right; font-weight: 700; }
   .spec-row.price .v { color: var(--rust); }
   .illustrative {
     font-family: 'Space Mono', ui-monospace, monospace;
     font-size: 12px;
     letter-spacing: 0.06em;
-    color: rgba(23,20,14,0.5);
+    color: rgba(241,224,197,0.5);
     margin-top: 24px;
     text-align: right;
   }
@@ -462,7 +466,7 @@
      ============================================================ */
   #workshop { background: var(--charcoal); color: var(--paper); }
   #workshop .eyebrow, #workshop .h2 { color: var(--paper); }
-  .workshop-body { max-width: 56ch; margin-top: 20px; font-size: 1.1rem; color: rgba(234,228,215,0.9); font-weight: 500; }
+  .workshop-body { max-width: 56ch; margin-top: 20px; font-size: 1.1rem; color: rgba(241,224,197,0.9); font-weight: 500; }
   .steps {
     display: grid;
     grid-template-columns: 1fr;
@@ -490,7 +494,7 @@
     margin: 8px 0 8px;
     text-transform: uppercase;
   }
-  .step .d { font-size: 0.98rem; color: rgba(234,228,215,0.82); font-weight: 500; }
+  .step .d { font-size: 0.98rem; color: rgba(241,224,197,0.82); font-weight: 500; }
 
   /* ============================================================
      THE MAKER
@@ -502,7 +506,7 @@
     gap: clamp(36px, 7vw, 64px);
     align-items: center;
   }
-  .maker-body { max-width: 50ch; margin-top: 20px; font-size: 1.08rem; font-weight: 500; color: rgba(23,20,14,0.88); }
+  .maker-body { max-width: 50ch; margin-top: 20px; font-size: 1.08rem; font-weight: 500; color: rgba(241,224,197,0.88); }
   .maker-name { margin-top: 6px; }
   .maker-portrait { max-width: 420px; width: 100%; }
   .maker-portrait .piece-ph { aspect-ratio: 4 / 5; background-color: #7d766a; }
@@ -510,7 +514,7 @@
   /* ============================================================
      ACQUIRE / FOOTER
      ============================================================ */
-  #acquire { background: var(--paper); }
+  #acquire { background: var(--concrete); }
   .acquire-lead { max-width: 48ch; margin-top: 20px; font-size: 1.1rem; font-weight: 500; }
 
   .signup { margin-top: 34px; max-width: 520px; }
@@ -520,12 +524,12 @@
     font-family: 'Space Mono', ui-monospace, monospace;
     font-size: 14px;
     padding: 15px 16px;
-    border: 2px solid var(--ink);
-    background: var(--concrete);
-    color: var(--ink);
+    border: 2px solid var(--paper);
+    background: var(--charcoal);
+    color: var(--paper);
     box-shadow: var(--shadow-sm);
   }
-  .signup input[type="email"]::placeholder { color: rgba(23,20,14,0.5); }
+  .signup input[type="email"]::placeholder { color: rgba(241,224,197,0.5); }
   .signup input[type="email"]:focus { outline: none; border-color: var(--rust); box-shadow: 6px 6px 0 var(--rust); }
   .signup .btn { flex: 0 0 auto; }
   .signup-msg {
@@ -541,7 +545,7 @@
   .channels {
     margin-top: 44px;
     padding-top: 32px;
-    border-top: 2px solid var(--ink);
+    border-top: 2px solid var(--paper);
     max-width: 52ch;
     font-size: 1.02rem;
     font-weight: 500;
@@ -560,18 +564,18 @@
     text-decoration: none;
     font-weight: 700;
     padding: 11px 16px;
-    border: 2px solid var(--ink);
-    background: var(--concrete);
+    border: 2px solid var(--paper);
+    background: var(--charcoal);
     transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--paper);
   }
   .social a:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--rust); color: var(--rust); }
 
   /* footer bar closes in charcoal */
   .footer-bar {
     background: var(--charcoal);
-    color: rgba(234,228,215,0.75);
-    border-top: 2px solid var(--ink);
+    color: rgba(241,224,197,0.75);
+    border-top: 2px solid var(--paper);
   }
   .footer-bar .wrap {
     padding-top: 26px; padding-bottom: 26px;
@@ -665,7 +669,7 @@
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-text reveal">
-          <h1 class="display">Concrete, Geometry,<br>and Light</h1>
+          <h1 class="display">Handmade<br>Brutalist Designs</h1>
           <p class="hero-sub">Somewhere between sculpture, architecture, and design object. Influenced by photography and minimalism, creating objects that continuously change throughout the day as the light shifts across their surfaces.</p>
           <div class="btns">
             <a href="#work" class="btn btn-primary">See the work</a>

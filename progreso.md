@@ -46,18 +46,27 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Hero: StackSans embebida + fix de centrado — 🚧 EN PR
-_Rama `claude/hero-section-redesign-kstx80` (rama reiniciada desde `main` tras
-mergear el PR anterior)._
-- **StackSans ahora embebida en base64:** el `@font-face` deja de apuntar a un
-  archivo suelto y lleva **StackSansHeadline-Bold** incrustada como data URI
-  (`data:font/otf;base64,…`), cubriendo todo el rango de peso para `h1/h2/h3`.
-  El sitio vuelve a ser **un solo archivo** (regla #5). Fallback: Archivo.
-- Se **borran los 6 `.otf` sueltos** de `fonts/` (ya redundantes); `fonts/README.md`
-  pasa a ser nota de **atribución + licencia OFL** (Stack Sans, SIL OFL 1.1).
-- **Fix de centrado:** se elimina el media query viejo de dos columnas del hero
-  (`.hero-grid { grid-template-columns: 1.15fr 0.85fr }`) que estrujaba el copy
-  a la izquierda. Ahora el título y el subtítulo quedan **realmente centrados**.
+### 2026-07-23 — Tema oscuro + headline nuevo (PR #7) — 🚧 EN PR
+_Rama `claude/hero-section-redesign-kstx80`, sobre el mismo PR #7._
+- **Headline nuevo:** «Concrete, Geometry, and Light» → **«Handmade / Brutalist
+  Designs»** (dos líneas más cortas, calza mucho mejor con StackSans).
+- **Paleta nueva → sitio oscuro con texto crema.** El hero naranja se mantiene;
+  el resto del sitio se **invierte a tema oscuro** con la paleta indicada:
+  - Texto y líneas estructurales: **crema `#F1E0C5`** (`--paper`).
+  - Fondos: `--concrete #241E18` (base) y `--charcoal #2E2720` (cards/workshop/
+    footer); `--ink #14110C` como negro más profundo (sombras, texto sobre tonos
+    claros, grout del hero).
+  - Acento: **rust `#C34A36`**. Tonos de piezas remapeados: `--ochre`→tan
+    `#C9B79C`, `--dusty`→purple `#B47EB3`, `--sage` `#71816D` (se conservan los
+    nombres de clase para no tocar el HTML de las piezas). `--maroon`/`--clay`
+    se mantienen como rojos cálidos que armonizan.
+  - Bordes brutalistas y sombras duras pasan a **crema** para leerse sobre
+    oscuro; divisores `rule-top` entre secciones también en crema.
+- **StackSans embebida en base64** (viene del trabajo previo del PR #7):
+  `StackSansHeadline-Bold` como data URI en el `@font-face`, un solo archivo
+  (regla #5), fallback Archivo. `fonts/README.md` = atribución + OFL 1.1.
+- **Hero centrado** (del trabajo previo del PR #7): copy centrado y sin el
+  eyebrow; se eliminó el media query viejo de dos columnas.
 
 ### 2026-07-23 — Hero: título centrado, StackSans (cableado) y nuevo subtítulo — ✅ MERGEADO
 _PR mergeado a `main`._
