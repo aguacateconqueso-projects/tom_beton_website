@@ -40,13 +40,26 @@ sesión, y las reglas de trabajo que seguimos.
 - **Secciones del sitio:** Hero (CTA único «Acquire») · Acquire / Footer.
   (The Work / Workshop / Maker se retiraron; «The Work» renacerá como **tienda**.)
 
+### ⏳ Pendiente destacado — TIENDA (a partir de «The Work»)
+La sección **The Work** (catálogo de 5 piezas con ficha técnica) se **eliminó
+del sitio vivo**, pero **NO se pierde**: su HTML+CSS completo vive en el
+historial de git. Es la **base para la futura tienda** (Adrián tiene un concepto
+aparte para eso; aún **no se arma**).
+- Último commit donde existe la sección intacta: **`33bb588`** (PR #11).
+  El commit que la retira es **`bcd67a8`** (PR #12).
+- Para recuperar solo esa sección más adelante:
+  `git show 33bb588:index.html` (buscar `<!-- ==== THE WORK ==== -->`), o
+  `git checkout 33bb588 -- index.html` para partir del archivo completo.
+- El CSS de `#work` / `.catalogue` / `.work-item` / `.piece-ph` / `.mark`
+  sigue presente (inerte) en `index.html`, listo para reusarse en la tienda.
+
 ---
 
 ## Registro de sesiones
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Botones brutalistas 3D + web enfocada en vender — 🔜 EN PR
+### 2026-07-23 — Botones brutalistas 3D + web enfocada en vender — ✅ MERGEADO (PR #12)
 _Rama `claude/web-visual-buttons-redesign-rt5d0c`._
 La web pasa a tener un solo objetivo: **VENDER**. Menos ruido, un CTA claro y un
 sistema de botones nuevo.
