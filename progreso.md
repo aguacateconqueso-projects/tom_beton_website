@@ -46,17 +46,25 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Hero: título centrado, StackSans y nuevo subtítulo — 🚧 EN PR
-_Rama `claude/hero-section-redesign-kstx80`. Pendiente de subir el `.otf`._
-- **Tipografía de titulares:** se cablea **StackSans** vía `@font-face`
-  (`fonts/StackSans.otf`, `format('opentype')`), aplicada a `h1/h2/h3`. Como no
-  está en Google Fonts, viaja como asset del repo; **Archivo** queda de fallback
-  con `font-display: swap` hasta que el archivo esté presente. Se añade
-  `fonts/README.md` indicando dónde dejar el `.otf` (o incrustarlo base64 si se
-  quiere respetar el archivo único, regla #5).
-- **Hero centrado:** el bloque de copy pasa a `text-align: center`; subtítulo con
-  `margin: 0 auto` y `max-width: 52ch`, botones centrados. El scrim de
-  legibilidad pasa de un degradado a la izquierda a uno **radial centrado**.
+### 2026-07-23 — Hero: StackSans embebida + fix de centrado — 🚧 EN PR
+_Rama `claude/hero-section-redesign-kstx80` (rama reiniciada desde `main` tras
+mergear el PR anterior)._
+- **StackSans ahora embebida en base64:** el `@font-face` deja de apuntar a un
+  archivo suelto y lleva **StackSansHeadline-Bold** incrustada como data URI
+  (`data:font/otf;base64,…`), cubriendo todo el rango de peso para `h1/h2/h3`.
+  El sitio vuelve a ser **un solo archivo** (regla #5). Fallback: Archivo.
+- Se **borran los 6 `.otf` sueltos** de `fonts/` (ya redundantes); `fonts/README.md`
+  pasa a ser nota de **atribución + licencia OFL** (Stack Sans, SIL OFL 1.1).
+- **Fix de centrado:** se elimina el media query viejo de dos columnas del hero
+  (`.hero-grid { grid-template-columns: 1.15fr 0.85fr }`) que estrujaba el copy
+  a la izquierda. Ahora el título y el subtítulo quedan **realmente centrados**.
+
+### 2026-07-23 — Hero: título centrado, StackSans (cableado) y nuevo subtítulo — ✅ MERGEADO
+_PR mergeado a `main`._
+- **Titulares en StackSans** vía `@font-face` (primer cableado apuntando a un
+  `.otf` en `fonts/`; luego se embebió en base64, ver entrada de arriba).
+- **Hero centrado:** copy con `text-align: center`, subtítulo `margin: 0 auto`
+  y `max-width: 52ch`, botones centrados; scrim pasa a **radial centrado**.
 - Se **elimina el eyebrow** «RAW CONCRETE · CAST BY HAND».
 - **Subtítulo nuevo:** «Somewhere between sculpture, architecture, and design
   object. Influenced by photography and minimalism, creating objects that
