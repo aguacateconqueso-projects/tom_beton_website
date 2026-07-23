@@ -46,16 +46,20 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Relieve del hero recoloreado a naranja #FF521B — 🚧 EN PR
-_Rama `claude/hero-section-redesign-kstx80`, PR nuevo._
+### 2026-07-23 — Relieve del hero recoloreado a naranja #FF521B — ✅ MERGEADO (PR #10)
+_Rama `claude/hero-section-redesign-kstx80`._
 - **El relieve/animación se mantiene idéntico** (mismo empaquetado Mondrian,
   mismo hover/scroll, mismo scrim). **Solo cambia el color** a la familia naranja
   `#FF521B`:
   - Caras: `--t0 #EE4614` · `--t1 #F84C18` · `--t2 #FF521B` · `--t3 #FF5D2A` ·
     `--t4 #FF6A3B` (bajo contraste, casi uniforme, como antes).
   - Paredes: `--wall-lit #D8410F` · `--wall-dark #BE380B`. Grout `#9A2A07`.
-- Nota: en un paso anterior (PR #9) se había **eliminado** el relieve por error de
-  interpretación; se revirtió y se restauró completo antes de recolorear.
+- Nota: en un paso anterior (PR #9, mergeado) se había **eliminado** el relieve
+  por un malentendido; se revirtió y se restauró completo antes de recolorear.
+
+_Cierre de sesión: hero con StackSans, headline «Handmade / Brutalist Designs»,
+sitio en tema oscuro con texto crema, y relieve del hero recoloreado a naranja
+`#FF521B` (animación intacta). Todo mergeado a `main`. Fin de la sesión._
 
 ### 2026-07-23 — Tema oscuro + headline nuevo — ✅ MERGEADO (PR #8)
 _Rama `claude/hero-section-redesign-kstx80`._
