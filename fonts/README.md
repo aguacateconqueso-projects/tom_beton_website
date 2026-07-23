@@ -1,15 +1,15 @@
 # fonts/
 
-Fuente de titulares del sitio: **StackSans**.
+La fuente de titulares **Stack Sans Headline (Bold)** ya **no vive como archivo
+suelto**: está incrustada como data URI base64 dentro del `@font-face` en
+`index.html`, para mantener el sitio en un solo archivo autocontenido (regla #5).
 
-Sube aquí el archivo con el nombre exacto:
+## Atribución / licencia
 
-    fonts/StackSans.otf
+- Fuente: **Stack Sans** — https://github.com/DylanYoungKoto/Stack-Sans
+- Licencia: **SIL Open Font License, Version 1.1** — https://openfontlicense.org
+- El aviso de copyright y licencia viaja dentro de la propia fuente (name table),
+  como exige la OFL.
 
-El `@font-face` en `index.html` ya la referencia como
-`url('fonts/StackSans.otf') format('opentype')`. Mientras el archivo no
-exista, los titulares caen a **Archivo** (fallback) sin romper nada.
-
-> Si prefieres mantener el sitio en un solo archivo (regla #5), en vez de
-> dejar el `.otf` suelto podemos incrustarlo como data URI base64 dentro
-> del `@font-face`. Dime y lo cambio.
+Si algún día quieres más pesos (Extralight, Light, Regular, Medium, SemiBold)
+para titulares más ligeros, súbelos y los embebo igual.
