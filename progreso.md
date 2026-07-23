@@ -46,7 +46,18 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Tema oscuro + headline nuevo (PR #7) — 🚧 EN PR
+### 2026-07-23 — Hero: naranja sólido, fuera el relieve — 🚧 EN PR
+_Rama `claude/hero-section-redesign-kstx80`, PR nuevo tras mergear #8._
+- El relieve de concreto generado (bloques Mondrian terracota que reaccionaban a
+  hover/scroll) se sentía **demasiado complicado** y el terracota apagado no
+  convencía. Se **elimina por completo** (CSS `.hero-relief`/`.hero-scrim`/`.blk`,
+  los dos `<div>` del hero y todo el `<script>` del generador) y el hero pasa a un
+  **naranja sólido y limpio `--orange #FF521B`**.
+- El resto (texto crema, botones, nav) se mantiene. El sitio queda más simple.
+- Pendiente charlar: las secciones internas siguen en **tema oscuro** (PR #8); si
+  también hay que aclararlas/simplificarlas, es otro paso.
+
+### 2026-07-23 — Tema oscuro + headline nuevo — ✅ MERGEADO (PR #8)
 _Rama `claude/hero-section-redesign-kstx80`, sobre el mismo PR #7._
 - **Headline nuevo:** «Concrete, Geometry, and Light» → **«Handmade / Brutalist
   Designs»** (dos líneas más cortas, calza mucho mejor con StackSans).
