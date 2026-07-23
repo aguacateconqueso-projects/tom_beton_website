@@ -46,8 +46,8 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-22 — Fondo del hero: relieve de concreto + nuevo título — 🟡 EN PR
-_Rama `claude/progreso-md-review-bbk1c0` → PR a `main` (pendiente de merge)._
+### 2026-07-22 — Fondo del hero: relieve de concreto + nuevo título — ✅ MERGEADO
+_PR #4 mergeado a `main` y desplegado en Vercel._
 - Se reemplaza el fondo del hero por un **relieve de concreto generado por
   código**: empaquetado tipo Mondrian de bloques terracota a distintas alturas,
   vista **frontal ortográfica** (sin isometría ni 45°), inspirado en una obra de
@@ -65,6 +65,9 @@ _Rama `claude/progreso-md-review-bbk1c0` → PR a `main` (pendiente de merge)._
 - Se retira el placeholder de pieza del hero (el relieve pasa a ser el visual).
 - **Título:** «Concrete you want to touch.» → **«Concrete, Geometry, and Light»**.
 - Todo inline en `index.html` (regla #5): CSS + JS, sin librerías.
+
+_Cierre de sesión: PR #4 mergeado. El fondo del hero (relieve reactivo) y el
+título quedan en `main`. Fin de la sesión del hero._
 
 ### 2026-07-22 — Color apagado en las piezas (primer pase) — ✅ MERGEADO
 _PR #3 mergeado a `main` y desplegado en Vercel._
