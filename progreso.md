@@ -46,6 +46,24 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
+### 2026-07-23 — Hero: título centrado, StackSans y nuevo subtítulo — 🚧 EN PR
+_Rama `claude/hero-section-redesign-kstx80`. Pendiente de subir el `.otf`._
+- **Tipografía de titulares:** se cablea **StackSans** vía `@font-face`
+  (`fonts/StackSans.otf`, `format('opentype')`), aplicada a `h1/h2/h3`. Como no
+  está en Google Fonts, viaja como asset del repo; **Archivo** queda de fallback
+  con `font-display: swap` hasta que el archivo esté presente. Se añade
+  `fonts/README.md` indicando dónde dejar el `.otf` (o incrustarlo base64 si se
+  quiere respetar el archivo único, regla #5).
+- **Hero centrado:** el bloque de copy pasa a `text-align: center`; subtítulo con
+  `margin: 0 auto` y `max-width: 52ch`, botones centrados. El scrim de
+  legibilidad pasa de un degradado a la izquierda a uno **radial centrado**.
+- Se **elimina el eyebrow** «RAW CONCRETE · CAST BY HAND».
+- **Subtítulo nuevo:** «Somewhere between sculpture, architecture, and design
+  object. Influenced by photography and minimalism, creating objects that
+  continuously change throughout the day as the light shifts across their
+  surfaces.»
+- Título se mantiene: «Concrete, Geometry, and Light».
+
 ### 2026-07-22 — Fondo del hero: relieve de concreto + nuevo título — ✅ MERGEADO
 _PR #4 mergeado a `main` y desplegado en Vercel._
 - Se reemplaza el fondo del hero por un **relieve de concreto generado por
