@@ -48,7 +48,7 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Acquire como carrusel infinito de piezas — 🕒 EN PR
+### 2026-07-23 — Acquire como carrusel infinito de piezas — ✅ MERGEADO (PR #15)
 _Rama `claude/progreso-acquire-section-o8m6ym` (reiniciada sobre `main` tras
 mergear el PR #14)._
 La sección **Acquire** deja de ser una grilla estática y pasa a un **carrusel
@@ -77,6 +77,12 @@ vanilla, sin librerías.
   misma sensación sin atrapar la página.
 - El CSS/markup del catálogo estático (`.catalogue`/`.work-item`/`.spec-*`) queda
   inerte de nuevo, disponible para una futura ficha de producto.
+
+_Cierre de sesión: la sección **Acquire** quedó como carrusel horizontal en loop
+eterno (deriva sola + reacciona al scroll sin secuestrarlo, flechas y arrastre),
+mergeado a `main` en el PR #15 y validado por Adrián. El sitio queda: **Hero
+(CTA Acquire) · Acquire (carrusel de piezas) · Sign-up / Footer**. Fin de la
+sesión._
 
 ### 2026-07-23 — Vuelve el catálogo, ahora como «Acquire» — ✅ MERGEADO (PR #14)
 _Rama `claude/progreso-acquire-section-o8m6ym`._
