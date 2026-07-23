@@ -37,14 +37,40 @@ sesión, y las reglas de trabajo que seguimos.
 
 - **Entregable:** `index.html` (sitio de demostración, un solo archivo).
 - **Rama de despliegue:** `main` (la despliega Vercel).
-- **Secciones del sitio:** Hero · The Work (catálogo, 5 piezas) · The Workshop ·
-  The Maker · Acquire / Footer.
+- **Secciones del sitio:** Hero (CTA único «Acquire») · Acquire / Footer.
+  (The Work / Workshop / Maker se retiraron; «The Work» renacerá como **tienda**.)
 
 ---
 
 ## Registro de sesiones
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
+
+### 2026-07-23 — Botones brutalistas 3D + web enfocada en vender — 🔜 EN PR
+_Rama `claude/web-visual-buttons-redesign-rt5d0c`._
+La web pasa a tener un solo objetivo: **VENDER**. Menos ruido, un CTA claro y un
+sistema de botones nuevo.
+- **Botones nuevos = bloque brutalista 3D que crece.** Cada `.btn` es un bloque
+  con cara superior de color y, al hover/focus, se **eleva** mientras una
+  **pared lateral se extruye** por debajo (mismo mecanismo que el relieve del
+  hero: `--lift` sube la cara y `::before` crece la pared; `::after` es la
+  sombra que se profundiza). `:active` baja el bloque. Respeta
+  `prefers-reduced-motion` (sin movimiento).
+- **Color de paleta aleatorio por botón.** Variantes `.v-rust/clay/maroon/sage/
+  purple/tan` (cara + pared más oscura + color de texto). JS asigna una variante
+  **al azar** a todo `.btn` que no traiga una fija. Fijos: hero **Acquire =
+  sage**, logo **Tom Beton = purple** (colores distintos del naranja del fondo).
+- **Un solo CTA en el hero.** Se elimina «See the work»; queda **un botón
+  «Acquire»** (la idea es vender, no pasear).
+- **«Tom Beton» (arriba) ahora es botón** con la misma animación 3D (púrpura).
+- **Nav podado:** se eliminan los enlaces **Work, Workshop y Maker**; en el nav
+  **solo queda Acquire**, también como botón 3D.
+- **Se eliminan las secciones Work, Workshop y Maker.** Lo que era **The Work**
+  se convertirá en la **tienda** más adelante (concepto aparte de Adrián); no se
+  arma todavía. El sitio queda: **Hero (CTA Acquire) · Acquire/Footer**.
+- CSS de esas secciones queda inerte (sin HTML que la use) a la espera del
+  rediseño de tienda; el botón «Notify me» del footer también adopta el formato
+  3D con color aleatorio. Sigue siendo un solo `index.html` (regla #5).
 
 ### 2026-07-23 — Relieve del hero recoloreado a naranja #FF521B — ✅ MERGEADO (PR #10)
 _Rama `claude/hero-section-redesign-kstx80`._

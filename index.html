@@ -179,44 +179,88 @@
     align-items: center;
     gap: clamp(10px, 3vw, 32px);
   }
-  .nav-links a {
-    font-family: 'Space Mono', ui-monospace, monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-weight: 400;
-    white-space: nowrap;
-    padding: 2px 0;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.15s ease, color 0.15s ease;
-  }
-  .nav-links a:hover { border-bottom-color: var(--rust); color: var(--rust); }
 
   main { padding-top: var(--nav-h); }
 
   /* ============================================================
-     BUTTONS
+     BUTTONS — brutalist 3D block that grows out of the surface
+     on hover, echoing the hero relief. The top face carries a
+     palette colour (assigned per button, random by default) and
+     a lit side wall extrudes beneath the lifted face.
      ============================================================ */
-  .btns { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 34px; }
+
   .btn {
+    /* colour pair — overridden by the .v-* variants below / JS */
+    --face: var(--rust);
+    --wall: #8E3325;
+    --txt:  var(--paper);
+    --lift: 0px;                       /* live extrusion height */
+
+    position: relative;
     font-family: 'Space Mono', ui-monospace, monospace;
     font-size: 13px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 700;
     text-decoration: none;
-    padding: 15px 24px;
-    border: 2px solid var(--paper);
+    padding: 15px 26px;
+    border: 2px solid var(--ink);
     display: inline-block;
     cursor: pointer;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-    box-shadow: var(--shadow-sm);
+    background: var(--face);
+    color: var(--txt);
+    transform: translateY(calc(var(--lift) * -1));
+    transition: transform 0.2s cubic-bezier(.2, .85, .25, 1);
+    will-change: transform;
+    z-index: 1;
   }
-  .btn-primary { background: var(--paper); color: var(--ink); }
-  .btn-secondary { background: transparent; color: var(--paper); }
-  .btn:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--paper); }
-  .btn:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--paper); }
+  /* the growing side wall (extrusion) beneath the top face */
+  .btn::before {
+    content: "";
+    position: absolute;
+    left: -2px; right: -2px;
+    top: 100%;
+    height: var(--lift);
+    background: linear-gradient(180deg, var(--wall) 0%, var(--ink) 230%);
+    border: 2px solid var(--ink);
+    border-top: 0;
+    z-index: -1;
+  }
+  /* soft ground shadow that deepens as the block rises */
+  .btn::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 100%;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.42);
+    transform: translateY(calc(var(--lift) + 2px));
+    filter: blur(calc(4px + var(--lift) * 0.5));
+    opacity: calc(0.10 + var(--lift) / 90);
+    z-index: -2;
+    pointer-events: none;
+  }
+  .btn:hover, .btn:focus-visible { --lift: 13px; }
+  .btn:active { --lift: 5px; transition-duration: 0.08s; }
+
+  /* palette variants: top face + darker side wall */
+  .btn.v-rust   { --face: #C34A36; --wall: #8E3325; --txt: var(--paper); }
+  .btn.v-clay   { --face: #C36A47; --wall: #8C4A31; --txt: var(--paper); }
+  .btn.v-maroon { --face: #7C3A31; --wall: #53271F; --txt: var(--paper); }
+  .btn.v-sage   { --face: #71816D; --wall: #4C574A; --txt: var(--paper); }
+  .btn.v-purple { --face: #B47EB3; --wall: #7E567E; --txt: var(--ink);  }
+  .btn.v-tan    { --face: #C9B79C; --wall: #9A8869; --txt: var(--ink);  }
+
+  /* compact size for the nav (logo + acquire) */
+  .btn-logo { padding: 8px 14px; font-size: 12px; letter-spacing: 0.12em; }
+  .btn-logo:hover, .btn-logo:focus-visible { --lift: 8px; }
+  .btn-logo:active { --lift: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn:hover, .btn:focus-visible, .btn:active { --lift: 0px; }
+  }
 
   /* ============================================================
      PLACEHOLDER PIECE BLOCKS
@@ -396,7 +440,6 @@
     color: rgba(240,233,219,0.92);
   }
   #hero .btns { justify-content: center; }
-  #hero .btn-secondary { color: var(--paper); border-color: var(--paper); }
 
   @media (prefers-reduced-motion: reduce) {
     .blk { transition: none; }
@@ -651,12 +694,9 @@
 <!-- ================= NAV ================= -->
 <header class="nav">
   <div class="nav-inner">
-    <a href="#hero" class="stamp" aria-label="Tom Beton — home">TOM BETON</a>
+    <a href="#hero" class="btn btn-logo v-purple" aria-label="Tom Beton — home">TOM BETON</a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#workshop">Workshop</a>
-      <a href="#maker">Maker</a>
-      <a href="#acquire">Acquire</a>
+      <a href="#acquire" class="btn btn-logo">Acquire</a>
     </nav>
   </div>
 </header>
@@ -673,180 +713,7 @@
           <h1 class="display">Handmade<br>Brutalist Designs</h1>
           <p class="hero-sub">Somewhere between sculpture, architecture, and design object. Influenced by photography and minimalism, creating objects that continuously change throughout the day as the light shifts across their surfaces.</p>
           <div class="btns">
-            <a href="#work" class="btn btn-primary">See the work</a>
-            <a href="#acquire" class="btn btn-secondary">Where to buy</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= THE WORK ================= -->
-  <section id="work" class="section-pad rule-top">
-    <div class="wrap">
-      <div class="reveal">
-        <p class="eyebrow">THE WORK</p>
-        <h2 class="h2">Each one cast, cured,<br>and finished by hand.</h2>
-        <p class="work-intro">No two are identical. The mold leaves its own marks, and I leave mine.</p>
-      </div>
-
-      <div class="catalogue reveal">
-
-        <!-- 1 -->
-        <article class="work-item">
-          <div class="piece-ph tone-ochre">
-            <span class="mark block fill-maroon"></span>
-            <span class="mark bar fill-rust"></span>
-            <span class="ph-corner mono">NO. 4</span>
-            <span class="ph-label">BLOCK NO. 4</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 01</div>
-            <h3 class="work-name">BLOCK NO. 4</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, sealed</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">8 × 8 × 6 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">900 g</span></div>
-              <div class="spec-row"><span class="k">Edition</span><span class="v">Made to order</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€48</span></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- 2 -->
-        <article class="work-item">
-          <div class="piece-ph tone-dusty">
-            <span class="mark bars fill-maroon"></span>
-            <span class="ph-corner mono">T-01</span>
-            <span class="ph-label">TOWER 01</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 02</div>
-            <h3 class="work-name">TOWER 01</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Raw grey concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">5 × 5 × 14 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.1 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Incense holder</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€62</span></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- 3 -->
-        <article class="work-item">
-          <div class="piece-ph tone-clay">
-            <span class="mark block fill-paper"></span>
-            <span class="ph-corner mono">VSL</span>
-            <span class="ph-label">VESSEL</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 03</div>
-            <h3 class="work-name">VESSEL</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Terracotta-tinted concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">11 × 11 × 9 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.4 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Planter or catchall</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€74</span></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- 4 -->
-        <article class="work-item">
-          <div class="piece-ph tone-sage">
-            <span class="mark block fill-clay"></span>
-            <span class="mark bar fill-maroon"></span>
-            <span class="ph-corner mono">×2</span>
-            <span class="ph-label">TWO FORMS</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 04</div>
-            <h3 class="work-name">TWO FORMS</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Raw concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">12 × 10 × 12 cm each</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">3.2 kg the pair</span></div>
-              <div class="spec-row"><span class="k">Edition</span><span class="v">Bookends, edition of 25</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€180</span></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- 5 -->
-        <article class="work-item">
-          <div class="piece-ph tone-maroon">
-            <span class="mark bars fill-ochre"></span>
-            <span class="ph-corner mono">SLB</span>
-            <span class="ph-label">SLAB</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 05</div>
-            <h3 class="work-name">SLAB</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, ember</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">24 × 14 × 2 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.6 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Tray</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€58</span></div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-      <p class="illustrative reveal">Illustrative pieces for this concept.</p>
-    </div>
-  </section>
-
-  <!-- ================= THE WORKSHOP ================= -->
-  <section id="workshop" class="section-pad rule-top">
-    <div class="wrap">
-      <div class="reveal">
-        <p class="eyebrow">THE WORKSHOP</p>
-        <h2 class="h2">Mold. Pour.<br>Cure. Release.</h2>
-        <p class="workshop-body">Every piece starts as a mold I build by hand. The concrete is mixed, poured, and left to cure for days — it can't be rushed. When it's ready, I break the mold away. What's left keeps every mark of how it was made. That's the point.</p>
-      </div>
-
-      <div class="steps reveal">
-        <div class="step">
-          <div class="n mono">01</div>
-          <div class="w">Mold</div>
-          <div class="d">Built by hand for each form.</div>
-        </div>
-        <div class="step">
-          <div class="n mono">02</div>
-          <div class="w">Pour</div>
-          <div class="d">Mixed and cast in small batches.</div>
-        </div>
-        <div class="step">
-          <div class="n mono">03</div>
-          <div class="w">Cure</div>
-          <div class="d">Days, not hours. It sets on its own time.</div>
-        </div>
-        <div class="step">
-          <div class="n mono">04</div>
-          <div class="w">Release</div>
-          <div class="d">The mold breaks away. The marks stay.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= THE MAKER ================= -->
-  <section id="maker" class="section-pad rule-top">
-    <div class="wrap">
-      <div class="maker-grid">
-        <div class="maker-text reveal">
-          <p class="eyebrow" style="color: var(--rust);">THE MAKER</p>
-          <h2 class="h2 maker-name">Tom Beton</h2>
-          <p class="maker-body">I make brutalist objects in concrete. Bauhaus and minimalism are where I started, and I never really left. I'm interested in the honest version of a thing — the material as it is, the joint left visible, the weight in your hand. Everything here is made by me, one at a time.</p>
-        </div>
-        <div class="maker-portrait reveal">
-          <div class="piece-ph">
-            <span class="ph-corner mono">STUDIO</span>
-            <span class="ph-label">HANDS AT THE MOLD</span>
+            <a href="#acquire" class="btn v-sage">Acquire</a>
           </div>
         </div>
       </div>
@@ -864,7 +731,7 @@
         <div class="signup">
           <form id="notify-form" novalidate>
             <input type="email" id="notify-email" name="email" placeholder="you@email.com" aria-label="Email address" required />
-            <button type="submit" class="btn btn-primary">Notify me</button>
+            <button type="submit" class="btn">Notify me</button>
           </form>
           <p class="signup-msg mono" id="notify-msg" role="status" aria-live="polite"></p>
         </div>
@@ -893,6 +760,17 @@
 <script>
   (function () {
     'use strict';
+
+    /* -------- Buttons: random palette colour per 3D block --------
+       Every .btn without an explicit .v-* variant gets a random tone
+       from the palette, so the brutalist blocks vary across the page. */
+    var BTN_VARIANTS = ['v-rust', 'v-clay', 'v-maroon', 'v-sage', 'v-purple', 'v-tan'];
+    document.querySelectorAll('.btn').forEach(function (b) {
+      var fixed = BTN_VARIANTS.some(function (v) { return b.classList.contains(v); });
+      if (!fixed) {
+        b.classList.add(BTN_VARIANTS[Math.floor(Math.random() * BTN_VARIANTS.length)]);
+      }
+    });
 
     /* -------- Smooth scroll offset for fixed nav (native smooth + anchors) --------
        Native CSS smooth-scroll handles the motion; we just correct the landing
