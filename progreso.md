@@ -37,27 +37,35 @@ sesión, y las reglas de trabajo que seguimos.
 
 - **Entregable:** `index.html` (sitio de demostración, un solo archivo).
 - **Rama de despliegue:** `main` (la despliega Vercel).
-- **Secciones del sitio:** Hero (CTA único «Acquire») · Acquire / Footer.
-  (The Work / Workshop / Maker se retiraron; «The Work» renacerá como **tienda**.)
-
-### ⏳ Pendiente destacado — TIENDA (a partir de «The Work»)
-La sección **The Work** (catálogo de 5 piezas con ficha técnica) se **eliminó
-del sitio vivo**, pero **NO se pierde**: su HTML+CSS completo vive en el
-historial de git. Es la **base para la futura tienda** (Adrián tiene un concepto
-aparte para eso; aún **no se arma**).
-- Último commit donde existe la sección intacta: **`33bb588`** (PR #11).
-  El commit que la retira es **`bcd67a8`** (PR #12).
-- Para recuperar solo esa sección más adelante:
-  `git show 33bb588:index.html` (buscar `<!-- ==== THE WORK ==== -->`), o
-  `git checkout 33bb588 -- index.html` para partir del archivo completo.
-- El CSS de `#work` / `.catalogue` / `.work-item` / `.piece-ph` / `.mark`
-  sigue presente (inerte) en `index.html`, listo para reusarse en la tienda.
+- **Secciones del sitio:** Hero (CTA único «Acquire») · **Acquire (catálogo de
+  5 piezas)** · Sign-up / Footer.
+  (Workshop / Maker siguen retirados; «The Work» volvió reconvertida en
+  **Acquire**.)
 
 ---
 
 ## Registro de sesiones
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
+
+### 2026-07-23 — Vuelve el catálogo, ahora como «Acquire» — 🕒 EN PR
+_Rama `claude/progreso-acquire-section-o8m6ym`._
+Se **recupera la sección The Work** (catálogo de 5 piezas con ficha técnica) que
+se había retirado en el PR #12, y **renace como la sección `#acquire`**: el sitio
+deja de tener solo un formulario de captura y vuelve a **mostrar las piezas**.
+- **HTML del catálogo restaurado** desde el commit `33bb588` (5 `.work-item`:
+  BLOCK NO. 4, TOWER 01, VESSEL, TWO FORMS, SLAB), ahora dentro de
+  `<section id="acquire">` con eyebrow **ACQUIRE** (antes «THE WORK»).
+- **Nav y CTA del hero ya apuntaban a `#acquire`**: ahora ese destino aterriza en
+  el catálogo, no en el formulario. Flujo: Hero → **Acquire (piezas)** → captura
+  de email + Etsy/redes + footer.
+- **El signup + footer** (que antes era `#acquire`) pasa a **`#notify`** para no
+  duplicar id; conserva su formulario y enlaces, sin el eyebrow «ACQUIRE»
+  repetido. Queda como cierre debajo del catálogo.
+- **CSS reusado tal cual** (`.catalogue`/`.work-item`/`.piece-ph`/`.mark`/
+  `.spec-*`): estaba inerte y se reactiva sin cambios. Solo se renombró el
+  selector de fondo `#work` → `#acquire` y el del signup a `#notify`. Sigue
+  siendo un solo `index.html` (regla #5).
 
 ### 2026-07-23 — Botones brutalistas 3D + web enfocada en vender — ✅ MERGEADO (PR #12)
 _Rama `claude/web-visual-buttons-redesign-rt5d0c`._
