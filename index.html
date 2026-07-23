@@ -61,11 +61,26 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3 { margin: 0; line-height: 0.98; letter-spacing: -0.02em; }
+  h1, h2, h3 {
+    margin: 0;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    font-family: 'StackSans', 'Archivo', system-ui, sans-serif;
+  }
 
   a { color: inherit; }
 
   img { max-width: 100%; display: block; }
+
+  /* ---------- StackSans (headlines) ----------
+     Local .otf placed in /fonts. Not on Google Fonts, so it ships as a
+     repo asset. Archivo stays as the fallback until the file loads. */
+  @font-face {
+    font-family: 'StackSans';
+    src: url('fonts/StackSans.otf') format('opentype');
+    font-weight: 100 900;
+    font-display: swap;
+  }
 
   /* ---------- shared type helpers ---------- */
   .mono {
@@ -326,9 +341,9 @@
   .hero-scrim {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      linear-gradient(90deg, rgba(40,18,10,.58) 0%, rgba(40,18,10,.32) 34%,
-                             rgba(40,18,10,.08) 62%, rgba(40,18,10,0) 80%),
-      linear-gradient(0deg, rgba(40,18,10,.4) 0%, rgba(40,18,10,0) 38%);
+      radial-gradient(120% 90% at 50% 46%, rgba(40,18,10,.5) 0%,
+                      rgba(40,18,10,.24) 46%, rgba(40,18,10,0) 78%),
+      linear-gradient(0deg, rgba(40,18,10,.34) 0%, rgba(40,18,10,0) 40%);
   }
 
   /* One extruded block. --h (base level + live lift) raises the top face and
@@ -363,14 +378,16 @@
     gap: clamp(40px, 8vw, 72px);
     align-items: center;
   }
+  /* Centred hero copy */
+  #hero .hero-text { text-align: center; }
   .hero-sub {
     font-size: clamp(1.05rem, 4vw, 1.35rem);
-    max-width: 34ch;
-    margin-top: 26px;
+    max-width: 52ch;
+    margin: 26px auto 0;
     font-weight: 500;
     color: rgba(240,233,219,0.92);
   }
-  #hero .eyebrow { color: var(--paper); }
+  #hero .btns { justify-content: center; }
   #hero .btn-secondary { color: var(--paper); border-color: var(--paper); }
 
   @media (prefers-reduced-motion: reduce) {
@@ -647,9 +664,8 @@
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-text reveal">
-          <p class="eyebrow">RAW CONCRETE · CAST BY HAND</p>
           <h1 class="display">Concrete, Geometry,<br>and Light</h1>
-          <p class="hero-sub">Small brutalist objects, cast one at a time. Bauhaus and minimalism, in something you can hold in one hand.</p>
+          <p class="hero-sub">Somewhere between sculpture, architecture, and design object. Influenced by photography and minimalism, creating objects that continuously change throughout the day as the light shifts across their surfaces.</p>
           <div class="btns">
             <a href="#work" class="btn btn-primary">See the work</a>
             <a href="#acquire" class="btn btn-secondary">Where to buy</a>
