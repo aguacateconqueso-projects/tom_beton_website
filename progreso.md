@@ -37,10 +37,10 @@ sesión, y las reglas de trabajo que seguimos.
 
 - **Entregable:** `index.html` (sitio de demostración, un solo archivo).
 - **Rama de despliegue:** `main` (la despliega Vercel).
-- **Secciones del sitio:** Hero (CTA único «Acquire») · **Acquire (catálogo de
-  5 piezas)** · Sign-up / Footer.
+- **Secciones del sitio:** Hero (CTA único «Acquire») · **Acquire (carrusel
+  infinito de 5 piezas)** · Sign-up / Footer.
   (Workshop / Maker siguen retirados; «The Work» volvió reconvertida en
-  **Acquire**.)
+  **Acquire**, ahora como carrusel horizontal en loop.)
 
 ---
 
@@ -48,7 +48,37 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
-### 2026-07-23 — Vuelve el catálogo, ahora como «Acquire» — 🕒 EN PR
+### 2026-07-23 — Acquire como carrusel infinito de piezas — 🕒 EN PR
+_Rama `claude/progreso-acquire-section-o8m6ym` (reiniciada sobre `main` tras
+mergear el PR #14)._
+La sección **Acquire** deja de ser una grilla estática y pasa a un **carrusel
+horizontal de productos en loop eterno**, inspirado en un video de referencia de
+Adrián (e-commerce brutalista de sneakers). Se mantiene en un solo `index.html`,
+vanilla, sin librerías.
+- **Tarjetas de producto** (`.acq-card`): "imagen" = el visual `.piece-ph` de
+  cada pieza (se reutiliza tal cual, con sus `mark`/tono/etiqueta), y debajo una
+  fila con **código** (`PIECE 0X`), **nombre** y **precio**. Separadores crema
+  entre tarjetas (look de rejilla brutalista).
+- **Movimiento (opción elegida, sin secuestrar el scroll):** el track **deriva
+  solo hacia la izquierda en loop infinito** (se clonan los ítems hasta llenar
+  ≥2× el viewport y se envuelve por el ancho de un set) y **toma prestada la
+  velocidad del scroll de la página** como empujón suave — nunca hace
+  `preventDefault`, así que el scroll fuerte sigue bajando la página con
+  normalidad. Hover pausa la deriva para poder leer.
+- **Controles:** flechas **‹ ›** (impulso ~1 tarjeta, con fricción), **arrastre**
+  con el puntero (con momentum al soltar) y enlace **VIEW ALL →**. Etiqueta de
+  categoría «MADE TO ORDER · SMALL BATCHES» a la izquierda (oculta en móvil).
+- **Accesibilidad:** respeta `prefers-reduced-motion` → sin auto-loop; la tira se
+  vuelve un **scroll horizontal nativo** con `scroll-snap` y las flechas hacen
+  `scrollBy`. Botones con `:focus-visible`. Cada tarjeta con `aria-label`
+  (nombre + precio).
+- Descartado el *scroll-jacking* fiel al video (fijar la sección y forzar el
+  avance): frágil entre dispositivos y hostil para una web de venta. Se logró la
+  misma sensación sin atrapar la página.
+- El CSS/markup del catálogo estático (`.catalogue`/`.work-item`/`.spec-*`) queda
+  inerte de nuevo, disponible para una futura ficha de producto.
+
+### 2026-07-23 — Vuelve el catálogo, ahora como «Acquire» — ✅ MERGEADO (PR #14)
 _Rama `claude/progreso-acquire-section-o8m6ym`._
 Se **recupera la sección The Work** (catálogo de 5 piezas con ficha técnica) que
 se había retirado en el PR #12, y **renace como la sección `#acquire`**: el sitio

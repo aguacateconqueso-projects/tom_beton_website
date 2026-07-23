@@ -506,6 +506,122 @@
   }
 
   /* ============================================================
+     ACQUIRE — infinite carousel of pieces
+     Auto-drifts in an eternal loop and reacts to scroll velocity;
+     never hijacks the page scroll. Arrows + drag to scrub.
+     ============================================================ */
+  .acq-carousel { margin-top: 48px; }
+  .acq-viewport {
+    overflow: hidden;
+    border-top: 2px solid var(--paper);
+    border-bottom: 2px solid var(--paper);
+    cursor: grab;
+    touch-action: pan-y;            /* let vertical page scroll through on touch */
+  }
+  .acq-viewport.is-drag { cursor: grabbing; }
+  .acq-track {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0; padding: 0;
+    list-style: none;
+    will-change: transform;
+  }
+  .acq-card {
+    flex: 0 0 auto;
+    width: clamp(220px, 26vw, 300px);
+    padding: clamp(16px, 2.4vw, 26px);
+    background: var(--charcoal);
+    border-right: 2px solid var(--paper);
+    -webkit-user-select: none; user-select: none;
+  }
+  .acq-card .acq-media.piece-ph {
+    aspect-ratio: 1 / 1;
+    box-shadow: none;              /* lighter inside the framed strip */
+    transition: transform 0.18s ease;
+  }
+  .acq-card:hover .acq-media.piece-ph { transform: translateY(-4px); }
+  .acq-card img,
+  .acq-card .acq-media { pointer-events: none; }   /* drag doesn't get snagged */
+
+  .acq-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: 12px;
+    margin-top: 16px;
+  }
+  .acq-code {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--rust);
+    margin-bottom: 4px;
+  }
+  .acq-name {
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .acq-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--paper);
+    text-align: right;
+  }
+
+  .acq-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  .acq-cat {
+    margin-right: auto;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(241,224,197,0.55);
+  }
+  .acq-nav { display: flex; gap: 8px; }
+  .acq-btn {
+    width: 46px; height: 42px;
+    border: 2px solid var(--paper);
+    background: var(--charcoal);
+    color: var(--paper);
+    font-size: 20px; line-height: 1;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--paper);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+  }
+  .acq-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--rust); color: var(--rust); }
+  .acq-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--paper); }
+  .acq-btn:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+  .acq-viewall {
+    margin-left: auto;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--paper);
+    border-bottom: 2px solid var(--rust);
+    padding-bottom: 2px;
+  }
+  .acq-viewall:hover { color: var(--rust); }
+
+  @media (max-width: 560px) {
+    .acq-cat { display: none; }
+    .acq-nav { margin-right: auto; }
+  }
+
+  /* Respect reduced-motion: no auto-drift; becomes a native horizontal scroller */
+  @media (prefers-reduced-motion: reduce) {
+    .acq-viewport { overflow-x: auto; scroll-snap-type: x proximity; cursor: default; }
+    .acq-card { scroll-snap-align: start; }
+    .acq-card .acq-media.piece-ph, .acq-card:hover .acq-media.piece-ph { transition: none; transform: none; }
+  }
+
+  /* ============================================================
      THE WORKSHOP — charcoal
      ============================================================ */
   #workshop { background: var(--charcoal); color: var(--paper); }
@@ -729,110 +845,93 @@
         <p class="work-intro">No two are identical. The mold leaves its own marks, and I leave mine.</p>
       </div>
 
-      <div class="catalogue reveal">
+      <div class="acq-carousel reveal" data-acq>
+        <div class="acq-viewport">
+          <ul class="acq-track">
 
-        <!-- 1 -->
-        <article class="work-item">
-          <div class="piece-ph tone-ochre">
-            <span class="mark block fill-maroon"></span>
-            <span class="mark bar fill-rust"></span>
-            <span class="ph-corner mono">NO. 4</span>
-            <span class="ph-label">BLOCK NO. 4</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 01</div>
-            <h3 class="work-name">BLOCK NO. 4</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, sealed</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">8 × 8 × 6 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">900 g</span></div>
-              <div class="spec-row"><span class="k">Edition</span><span class="v">Made to order</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€48</span></div>
-            </div>
-          </div>
-        </article>
+            <!-- 1 -->
+            <li class="acq-card" role="group" aria-label="BLOCK NO. 4 — €48">
+              <div class="acq-media piece-ph tone-ochre">
+                <span class="mark block fill-maroon"></span>
+                <span class="mark bar fill-rust"></span>
+                <span class="ph-corner mono">NO. 4</span>
+                <span class="ph-label">BLOCK NO. 4</span>
+              </div>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 01</span>
+                <span class="acq-name">BLOCK NO. 4</span>
+                <span class="acq-price mono">€48</span>
+              </div>
+            </li>
 
-        <!-- 2 -->
-        <article class="work-item">
-          <div class="piece-ph tone-dusty">
-            <span class="mark bars fill-maroon"></span>
-            <span class="ph-corner mono">T-01</span>
-            <span class="ph-label">TOWER 01</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 02</div>
-            <h3 class="work-name">TOWER 01</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Raw grey concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">5 × 5 × 14 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.1 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Incense holder</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€62</span></div>
-            </div>
-          </div>
-        </article>
+            <!-- 2 -->
+            <li class="acq-card" role="group" aria-label="TOWER 01 — €62">
+              <div class="acq-media piece-ph tone-dusty">
+                <span class="mark bars fill-maroon"></span>
+                <span class="ph-corner mono">T-01</span>
+                <span class="ph-label">TOWER 01</span>
+              </div>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 02</span>
+                <span class="acq-name">TOWER 01</span>
+                <span class="acq-price mono">€62</span>
+              </div>
+            </li>
 
-        <!-- 3 -->
-        <article class="work-item">
-          <div class="piece-ph tone-clay">
-            <span class="mark block fill-paper"></span>
-            <span class="ph-corner mono">VSL</span>
-            <span class="ph-label">VESSEL</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 03</div>
-            <h3 class="work-name">VESSEL</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Terracotta-tinted concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">11 × 11 × 9 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.4 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Planter or catchall</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€74</span></div>
-            </div>
-          </div>
-        </article>
+            <!-- 3 -->
+            <li class="acq-card" role="group" aria-label="VESSEL — €74">
+              <div class="acq-media piece-ph tone-clay">
+                <span class="mark block fill-paper"></span>
+                <span class="ph-corner mono">VSL</span>
+                <span class="ph-label">VESSEL</span>
+              </div>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 03</span>
+                <span class="acq-name">VESSEL</span>
+                <span class="acq-price mono">€74</span>
+              </div>
+            </li>
 
-        <!-- 4 -->
-        <article class="work-item">
-          <div class="piece-ph tone-sage">
-            <span class="mark block fill-clay"></span>
-            <span class="mark bar fill-maroon"></span>
-            <span class="ph-corner mono">×2</span>
-            <span class="ph-label">TWO FORMS</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 04</div>
-            <h3 class="work-name">TWO FORMS</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Raw concrete</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">12 × 10 × 12 cm each</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">3.2 kg the pair</span></div>
-              <div class="spec-row"><span class="k">Edition</span><span class="v">Bookends, edition of 25</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€180</span></div>
-            </div>
-          </div>
-        </article>
+            <!-- 4 -->
+            <li class="acq-card" role="group" aria-label="TWO FORMS — €180">
+              <div class="acq-media piece-ph tone-sage">
+                <span class="mark block fill-clay"></span>
+                <span class="mark bar fill-maroon"></span>
+                <span class="ph-corner mono">×2</span>
+                <span class="ph-label">TWO FORMS</span>
+              </div>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 04</span>
+                <span class="acq-name">TWO FORMS</span>
+                <span class="acq-price mono">€180</span>
+              </div>
+            </li>
 
-        <!-- 5 -->
-        <article class="work-item">
-          <div class="piece-ph tone-maroon">
-            <span class="mark bars fill-ochre"></span>
-            <span class="ph-corner mono">SLB</span>
-            <span class="ph-label">SLAB</span>
-          </div>
-          <div class="work-spec">
-            <div class="work-index mono">PIECE 05</div>
-            <h3 class="work-name">SLAB</h3>
-            <div class="spec-table">
-              <div class="spec-row"><span class="k">Material</span><span class="v">Pigmented concrete, ember</span></div>
-              <div class="spec-row"><span class="k">Dimensions</span><span class="v">24 × 14 × 2 cm</span></div>
-              <div class="spec-row"><span class="k">Weight</span><span class="v">1.6 kg</span></div>
-              <div class="spec-row"><span class="k">Use</span><span class="v">Tray</span></div>
-              <div class="spec-row price"><span class="k">Price</span><span class="v">€58</span></div>
-            </div>
-          </div>
-        </article>
+            <!-- 5 -->
+            <li class="acq-card" role="group" aria-label="SLAB — €58">
+              <div class="acq-media piece-ph tone-maroon">
+                <span class="mark bars fill-ochre"></span>
+                <span class="ph-corner mono">SLB</span>
+                <span class="ph-label">SLAB</span>
+              </div>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 05</span>
+                <span class="acq-name">SLAB</span>
+                <span class="acq-price mono">€58</span>
+              </div>
+            </li>
 
+          </ul>
+        </div>
+
+        <div class="acq-controls">
+          <span class="acq-cat mono">MADE TO ORDER · SMALL BATCHES</span>
+          <div class="acq-nav">
+            <button type="button" class="acq-btn" data-acq-prev aria-label="Previous pieces">‹</button>
+            <button type="button" class="acq-btn" data-acq-next aria-label="Next pieces">›</button>
+          </div>
+          <a class="acq-viewall mono" href="#notify">VIEW ALL →</a>
+        </div>
       </div>
 
       <p class="illustrative reveal">Illustrative pieces for this concept.</p>
@@ -943,6 +1042,139 @@
         form.reset();
       });
     }
+
+    /* -------- Acquire: infinite piece carousel --------
+       Drifts leftwards in an eternal loop (built by cloning the set) and
+       borrows the page's scroll velocity as a gentle nudge — it never
+       preventDefaults the scroll, so hard scrolling still moves the page.
+       Arrows and pointer-drag scrub it. Reduced-motion → native scroller. */
+    (function () {
+      var root = document.querySelector('[data-acq]');
+      if (!root) return;
+      var viewport = root.querySelector('.acq-viewport');
+      var track = root.querySelector('.acq-track');
+      var prevBtn = root.querySelector('[data-acq-prev]');
+      var nextBtn = root.querySelector('[data-acq-next]');
+      if (!viewport || !track) return;
+
+      var originals = Array.prototype.slice.call(track.children);
+      if (!originals.length) return;
+
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* Reduced motion: leave the native overflow-x scroller (CSS) and just
+         wire the arrows to page-by-card scrolling. No auto-loop. */
+      if (reduce) {
+        var stepR = originals[0].getBoundingClientRect().width + 2;
+        if (nextBtn) nextBtn.addEventListener('click', function () { viewport.scrollBy({ left: stepR, behavior: 'smooth' }); });
+        if (prevBtn) prevBtn.addEventListener('click', function () { viewport.scrollBy({ left: -stepR, behavior: 'smooth' }); });
+        return;
+      }
+
+      function setWidth() {
+        var w = 0;
+        originals.forEach(function (el) { w += el.getBoundingClientRect().width; });
+        return w;
+      }
+      function fillClones() {
+        while (track.children.length > originals.length) track.removeChild(track.lastChild);
+        var need = viewport.clientWidth * 2 + setWidth();
+        var guard = 0;
+        while (track.scrollWidth < need && guard < 16) {
+          originals.forEach(function (el) { track.appendChild(el.cloneNode(true)); });
+          guard++;
+        }
+      }
+      fillClones();
+
+      var SET = setWidth();               // width of one original set (wrap unit)
+      var cardW = originals[0].getBoundingClientRect().width;
+      var pos = 0;                        // px translated left (we render -pos)
+      var BASE = 0.35;                    // idle drift, px per 60fps frame
+      var vel = 0;                        // scroll/arrow impulse velocity
+      var FRICTION = 0.92;
+      var paused = false;                 // hover-to-read
+      var dragging = false, dragStartX = 0, dragStartPos = 0, prevX = 0, moved = 0;
+      var last = performance.now();
+
+      function wrap() { if (SET > 0) { pos %= SET; if (pos < 0) pos += SET; } }
+
+      function frame(now) {
+        var dt = Math.min(2.5, (now - last) / 16.667);
+        last = now;
+        if (!dragging) {
+          var drift = paused ? 0 : BASE;
+          pos += (drift + vel) * dt;
+          vel *= FRICTION;
+          if (Math.abs(vel) < 0.001) vel = 0;
+        }
+        wrap();
+        track.style.transform = 'translate3d(' + (-pos) + 'px,0,0)';
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      /* hover pauses the idle drift so the pieces can be read (mouse only) */
+      root.addEventListener('mouseenter', function () { paused = true; });
+      root.addEventListener('mouseleave', function () { paused = false; });
+
+      /* arrows: a decaying impulse of about one card */
+      function nudge(dir) { vel += dir * cardW * 0.14; }
+      if (nextBtn) nextBtn.addEventListener('click', function () { nudge(1); });
+      if (prevBtn) prevBtn.addEventListener('click', function () { nudge(-1); });
+
+      /* borrow page-scroll velocity while the strip is on screen — no hijack */
+      var inView = true, lastY = window.pageYOffset;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }, { threshold: 0.05 }).observe(root);
+      }
+      window.addEventListener('scroll', function () {
+        var y = window.pageYOffset;
+        var dy = y - lastY; lastY = y;
+        if (inView) vel += dy * 0.05;
+      }, { passive: true });
+
+      /* pointer drag to scrub, with release momentum */
+      viewport.addEventListener('pointerdown', function (e) {
+        dragging = true; moved = 0;
+        dragStartX = prevX = e.clientX; dragStartPos = pos; vel = 0;
+        viewport.classList.add('is-drag');
+        try { viewport.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      viewport.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - dragStartX;
+        moved += Math.abs(e.clientX - prevX);
+        pos = dragStartPos - dx;
+        vel = -(e.clientX - prevX);       // carried as momentum on release
+        prevX = e.clientX;
+        wrap();
+      });
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        viewport.classList.remove('is-drag');
+      }
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      viewport.addEventListener('pointerleave', endDrag);
+      /* swallow the click that ends a real drag so cards don't fire by accident */
+      viewport.addEventListener('click', function (e) {
+        if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
+      }, true);
+
+      /* rebuild clones / measurements on resize */
+      var rt;
+      window.addEventListener('resize', function () {
+        clearTimeout(rt);
+        rt = setTimeout(function () {
+          fillClones();
+          SET = setWidth();
+          cardW = originals[0].getBoundingClientRect().width;
+          wrap();
+        }, 180);
+      });
+    })();
   })();
 </script>
 
