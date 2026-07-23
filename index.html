@@ -621,6 +621,137 @@
     .acq-card .acq-media.piece-ph, .acq-card:hover .acq-media.piece-ph { transition: none; transform: none; }
   }
 
+  /* Real product cards: photo + click-to-open button */
+  .acq-open {
+    display: block; width: 100%; padding: 0; border: 0;
+    background: none; cursor: pointer; position: relative;
+    -webkit-user-select: none; user-select: none;
+  }
+  .acq-media.acq-photo {
+    display: block; width: 100%; aspect-ratio: 1 / 1;
+    object-fit: cover; object-position: center;
+    background: var(--concrete);
+    transition: transform 0.18s ease;
+  }
+  .acq-card:hover .acq-media.acq-photo { transform: translateY(-4px); }
+  .acq-badge {
+    position: absolute; left: 10px; bottom: 10px;
+    font-size: 10px; letter-spacing: 0.12em; font-weight: 700;
+    color: var(--ink); background: var(--paper); padding: 4px 8px;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .18s ease, transform .18s ease;
+    pointer-events: none;
+  }
+  .acq-card:hover .acq-badge,
+  .acq-open:focus-visible .acq-badge { opacity: 1; transform: translateY(0); }
+  .acq-open:focus-visible { outline: 3px solid var(--rust); outline-offset: 3px; }
+
+  /* ============================================================
+     PRODUCT MODAL — centered lightbox gallery
+     ============================================================ */
+  .pm[hidden] { display: none; }
+  .pm {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: clamp(12px, 3vw, 32px);
+  }
+  .pm-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(10, 8, 5, 0.82);
+    -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  }
+  .pm-dialog {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(16px, 2.5vw, 32px);
+    width: min(1040px, 100%);
+    max-height: calc(100vh - clamp(24px, 6vw, 64px));
+    background: var(--charcoal);
+    border: 2px solid var(--paper);
+    box-shadow: 12px 12px 0 var(--ink);
+    padding: clamp(16px, 2.4vw, 28px);
+    overflow: hidden;
+    animation: pm-in .22s ease;
+  }
+  @keyframes pm-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .pm-x {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    width: 40px; height: 40px; border: 2px solid var(--paper);
+    background: var(--charcoal); color: var(--paper);
+    font-size: 17px; line-height: 1; cursor: pointer;
+  }
+  .pm-x:hover { color: var(--rust); border-color: var(--rust); }
+  .pm-x:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+
+  .pm-gallery { position: relative; display: flex; flex-direction: column; min-width: 0; }
+  .pm-stage {
+    position: relative; flex: 1 1 auto; min-height: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ink); border: 2px solid var(--paper); overflow: hidden;
+  }
+  .pm-stage img, .pm-stage video {
+    max-width: 100%; max-height: min(64vh, 560px);
+    width: auto; height: auto; display: block; object-fit: contain;
+  }
+  .pm-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; z-index: 2;
+    border: 2px solid var(--paper); background: rgba(20,17,12,0.72);
+    color: var(--paper); font-size: 22px; line-height: 1; cursor: pointer;
+  }
+  .pm-arrow:hover { color: var(--rust); border-color: var(--rust); background: var(--ink); }
+  .pm-arrow:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+  .pm-prev { left: 8px; }
+  .pm-next { right: 8px; }
+  .pm-counter {
+    position: absolute; right: 10px; bottom: 10px; z-index: 2;
+    font-size: 11px; letter-spacing: .1em; color: var(--paper);
+    background: rgba(20,17,12,0.72); padding: 3px 8px;
+  }
+  .pm-thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; flex: 0 0 auto; }
+  .pm-thumb {
+    flex: 0 0 auto; width: 60px; height: 60px; padding: 0; position: relative;
+    border: 2px solid transparent; background: var(--ink); cursor: pointer;
+  }
+  .pm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pm-thumb.is-active { border-color: var(--rust); }
+  .pm-thumb:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+  .pm-thumb.is-video::after {
+    content: '▶'; position: absolute; inset: 0; display: flex;
+    align-items: center; justify-content: center;
+    color: var(--paper); font-size: 15px; background: rgba(20,17,12,0.38);
+  }
+
+  .pm-info { min-width: 0; overflow-y: auto; padding-right: 4px; }
+  .pm-eyebrow { font-size: 11px; letter-spacing: .14em; color: var(--rust); font-weight: 700; margin-bottom: 8px; }
+  .pm-title { font-size: clamp(1.2rem, 2.2vw, 1.55rem); line-height: 1.15; font-weight: 800; letter-spacing: -0.01em; }
+  .pm-price { font-size: 1.3rem; font-weight: 800; margin-top: 12px; color: var(--paper); }
+  .pm-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+  .pm-spec { border: 2px solid var(--paper); padding: 12px; }
+  .pm-spec .k { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(241,224,197,0.6); font-weight: 700; margin-bottom: 5px; }
+  .pm-spec .v { font-size: 13px; font-weight: 700; }
+  .pm-desc { font-size: 0.98rem; line-height: 1.6; color: rgba(241,224,197,0.9); }
+  .pm-etsy {
+    display: inline-block; margin-top: 20px; text-decoration: none;
+    font-size: 13px; letter-spacing: .06em; font-weight: 700; color: var(--paper);
+    border: 2px solid var(--paper); padding: 10px 16px;
+    box-shadow: 4px 4px 0 var(--rust);
+    transition: transform .12s ease, box-shadow .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .pm-etsy:hover { color: var(--rust); border-color: var(--rust); transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--rust); }
+  body.pm-open { overflow: hidden; }
+
+  @media (max-width: 720px) {
+    .pm-dialog { grid-template-columns: 1fr; overflow-y: auto; }
+    .pm-stage img, .pm-stage video { max-height: 44vh; }
+    .pm-info { overflow: visible; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pm-dialog { animation: none; }
+    .acq-media.acq-photo, .acq-card:hover .acq-media.acq-photo { transition: none; transform: none; }
+  }
+
   /* ============================================================
      THE WORKSHOP — charcoal
      ============================================================ */
@@ -849,6 +980,36 @@
         <div class="acq-viewport">
           <ul class="acq-track">
 
+            <!-- Real product 1 -->
+            <li class="acq-card acq-product" role="group" aria-label="Bauhaus Brutalist Concrete Wall Sculpture — €450">
+              <button type="button" class="acq-open" data-product="p1" aria-haspopup="dialog"
+                      aria-label="View Bauhaus Brutalist Concrete Wall Sculpture">
+                <img class="acq-media acq-photo" src="img/products/p1-01.jpg"
+                     alt="Textured geometric concrete relief in terracotta" loading="lazy" decoding="async">
+                <span class="acq-badge mono">VIEW ›</span>
+              </button>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 01</span>
+                <span class="acq-name">RELIEF 01</span>
+                <span class="acq-price mono">€450</span>
+              </div>
+            </li>
+
+            <!-- Real product 2 -->
+            <li class="acq-card acq-product" role="group" aria-label="Handmade Brutalist Concrete Wall Art — Geometric Bauhaus Sculpture">
+              <button type="button" class="acq-open" data-product="p2" aria-haspopup="dialog"
+                      aria-label="View Handmade Brutalist Concrete Wall Art">
+                <img class="acq-media acq-photo" src="img/products/p2-01.jpg"
+                     alt="Geometric concrete grid wall sculpture with fluted base, terracotta" loading="lazy" decoding="async">
+                <span class="acq-badge mono">VIEW ›</span>
+              </button>
+              <div class="acq-info">
+                <span class="acq-code mono">PIECE 02</span>
+                <span class="acq-name">GRID 01</span>
+                <span class="acq-price mono">€—</span>
+              </div>
+            </li>
+
             <!-- 1 -->
             <li class="acq-card" role="group" aria-label="BLOCK NO. 4 — €48">
               <div class="acq-media piece-ph tone-ochre">
@@ -858,7 +1019,7 @@
                 <span class="ph-label">BLOCK NO. 4</span>
               </div>
               <div class="acq-info">
-                <span class="acq-code mono">PIECE 01</span>
+                <span class="acq-code mono">PIECE 03</span>
                 <span class="acq-name">BLOCK NO. 4</span>
                 <span class="acq-price mono">€48</span>
               </div>
@@ -872,7 +1033,7 @@
                 <span class="ph-label">TOWER 01</span>
               </div>
               <div class="acq-info">
-                <span class="acq-code mono">PIECE 02</span>
+                <span class="acq-code mono">PIECE 04</span>
                 <span class="acq-name">TOWER 01</span>
                 <span class="acq-price mono">€62</span>
               </div>
@@ -886,7 +1047,7 @@
                 <span class="ph-label">VESSEL</span>
               </div>
               <div class="acq-info">
-                <span class="acq-code mono">PIECE 03</span>
+                <span class="acq-code mono">PIECE 05</span>
                 <span class="acq-name">VESSEL</span>
                 <span class="acq-price mono">€74</span>
               </div>
@@ -901,7 +1062,7 @@
                 <span class="ph-label">TWO FORMS</span>
               </div>
               <div class="acq-info">
-                <span class="acq-code mono">PIECE 04</span>
+                <span class="acq-code mono">PIECE 06</span>
                 <span class="acq-name">TWO FORMS</span>
                 <span class="acq-price mono">€180</span>
               </div>
@@ -915,7 +1076,7 @@
                 <span class="ph-label">SLAB</span>
               </div>
               <div class="acq-info">
-                <span class="acq-code mono">PIECE 05</span>
+                <span class="acq-code mono">PIECE 07</span>
                 <span class="acq-name">SLAB</span>
                 <span class="acq-price mono">€58</span>
               </div>
@@ -973,6 +1134,29 @@
   </section>
 
 </main>
+
+<!-- ================= PRODUCT MODAL (centered lightbox gallery) ================= -->
+<div class="pm" id="productModal" hidden>
+  <div class="pm-backdrop" data-pm-close></div>
+  <div class="pm-dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title" aria-describedby="pm-desc">
+    <button class="pm-x" type="button" data-pm-close aria-label="Close">✕</button>
+    <div class="pm-gallery">
+      <div class="pm-stage" data-pm-stage></div>
+      <button class="pm-arrow pm-prev" type="button" data-pm-prev aria-label="Previous image">‹</button>
+      <button class="pm-arrow pm-next" type="button" data-pm-next aria-label="Next image">›</button>
+      <span class="pm-counter mono" data-pm-counter></span>
+      <div class="pm-thumbs" data-pm-thumbs></div>
+    </div>
+    <div class="pm-info">
+      <p class="pm-eyebrow mono" data-pm-code></p>
+      <h3 class="pm-title" id="pm-title" data-pm-title></h3>
+      <p class="pm-price" data-pm-price></p>
+      <div class="pm-specs" data-pm-specs></div>
+      <p class="pm-desc" id="pm-desc" data-pm-desc></p>
+      <a class="pm-etsy" data-pm-etsy target="_blank" rel="noopener noreferrer">Buy on Etsy →</a>
+    </div>
+  </div>
+</div>
 
 <script>
   (function () {
@@ -1173,6 +1357,202 @@
           cardW = originals[0].getBoundingClientRect().width;
           wrap();
         }, 180);
+      });
+    })();
+
+    /* -------- Product modal: centered lightbox gallery --------
+       One reusable dialog. Opens on click of any [data-product] card
+       (delegated, so cloned carousel cards work too). Manual navigation:
+       arrows, thumbnails, keyboard (← →), swipe. Esc / ✕ / backdrop close;
+       focus is trapped and restored. */
+    (function () {
+      var PRODUCTS = {
+        p1: {
+          code: 'PIECE 01',
+          title: 'Bauhaus Brutalist Concrete Wall Sculpture — Textured Geometric Relief',
+          price: '€450',
+          desc: 'Cast in solid concrete, this wall panel layers geometric forms at varying depths. The relief catches light and shadow across the day, so its surface never looks the same twice — signature brutalist work, finished by hand.',
+          etsy: 'https://tombetonshop.etsy.com',
+          specs: [
+            { k: 'Dimensions', v: '352 × 594 × 40 mm' },
+            { k: 'Finish', v: 'Terracotta · Cream' },
+            { k: 'Material', v: 'Solid concrete' },
+            { k: 'Made to order', v: 'Yes' }
+          ],
+          media: [
+            { type: 'img', src: 'img/products/p1-01.jpg', alt: 'Textured geometric concrete relief in terracotta, detail' },
+            { type: 'video', src: 'img/products/p1.mp4' },
+            { type: 'img', src: 'img/products/p1-02.jpg', alt: 'Terracotta concrete relief mounted on a white wall' },
+            { type: 'img', src: 'img/products/p1-03.jpg', alt: 'Cream concrete relief mounted on a sage wall' },
+            { type: 'img', src: 'img/products/p1-04.jpg', alt: 'Cream concrete relief, detail of the raised blocks' }
+          ]
+        },
+        p2: {
+          code: 'PIECE 02',
+          title: 'Handmade Brutalist Concrete Wall Art — Geometric Bauhaus Sculpture',
+          price: '',                       /* TODO: precio del producto 2 (pendiente de Adrián) */
+          desc: 'A handcrafted concrete wall sculpture for lovers of geometric, Bauhaus-inflected design. A tight grid of cast blocks breaks into a fluted colonnade along the base, shifting with the light as it moves through the room.',
+          etsy: 'https://tombetonshop.etsy.com',
+          specs: [
+            /* TODO: dimensiones del producto 2 (pendiente de Adrián) */
+            { k: 'Finish', v: 'Terracotta · Blue · Grey' },
+            { k: 'Material', v: 'Solid concrete' },
+            { k: 'Made to order', v: 'Yes' }
+          ],
+          media: [
+            { type: 'img', src: 'img/products/p2-01.jpg', alt: 'Geometric concrete grid wall sculpture with fluted base, terracotta' },
+            { type: 'video', src: 'img/products/p2.mp4' },
+            { type: 'img', src: 'img/products/p2-02.jpg', alt: 'Geometric concrete grid wall sculpture in blue' },
+            { type: 'img', src: 'img/products/p2-03.jpg', alt: 'Terracotta grid sculpture, detail of the colonnade in raking light' },
+            { type: 'img', src: 'img/products/p2-04.jpg', alt: 'Geometric concrete grid wall sculpture in grey' }
+          ]
+        }
+      };
+
+      var modal = document.getElementById('productModal');
+      if (!modal) return;
+      var stage   = modal.querySelector('[data-pm-stage]');
+      var thumbs  = modal.querySelector('[data-pm-thumbs]');
+      var counter = modal.querySelector('[data-pm-counter]');
+      var elCode  = modal.querySelector('[data-pm-code]');
+      var elTitle = modal.querySelector('[data-pm-title]');
+      var elPrice = modal.querySelector('[data-pm-price]');
+      var elSpecs = modal.querySelector('[data-pm-specs]');
+      var elDesc  = modal.querySelector('[data-pm-desc]');
+      var elEtsy  = modal.querySelector('[data-pm-etsy]');
+      var prevBtn = modal.querySelector('[data-pm-prev]');
+      var nextBtn = modal.querySelector('[data-pm-next]');
+      var closeEls = modal.querySelectorAll('[data-pm-close]');
+
+      var current = null, index = 0, lastFocus = null;
+
+      function renderStage() {
+        var m = current.media[index];
+        stage.innerHTML = '';
+        var node;
+        if (m.type === 'video') {
+          node = document.createElement('video');
+          node.src = m.src; node.controls = true; node.playsInline = true; node.preload = 'metadata';
+        } else {
+          node = document.createElement('img');
+          node.src = m.src; node.alt = m.alt || current.title;
+        }
+        stage.appendChild(node);
+        counter.textContent = (index + 1) + ' / ' + current.media.length;
+        Array.prototype.forEach.call(thumbs.children, function (t, i) {
+          t.classList.toggle('is-active', i === index);
+          if (i === index) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current');
+        });
+        var single = current.media.length < 2;
+        prevBtn.style.display = single ? 'none' : '';
+        nextBtn.style.display = single ? 'none' : '';
+      }
+
+      function go(dir) { index = (index + dir + current.media.length) % current.media.length; renderStage(); }
+      function goTo(i) { index = i; renderStage(); }
+
+      function buildThumbs() {
+        thumbs.innerHTML = '';
+        current.media.forEach(function (m, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'pm-thumb' + (m.type === 'video' ? ' is-video' : '');
+          b.setAttribute('aria-label', (m.type === 'video' ? 'Play video' : 'Show image ') + (m.type === 'video' ? '' : (i + 1)));
+          var im = document.createElement('img');
+          im.src = (m.type === 'video') ? current.media[0].src : m.src;
+          im.alt = ''; im.loading = 'lazy';
+          b.appendChild(im);
+          b.addEventListener('click', function () { goTo(i); });
+          thumbs.appendChild(b);
+        });
+      }
+
+      function open(id) {
+        current = PRODUCTS[id];
+        if (!current) return;
+        index = 0;
+        lastFocus = document.activeElement;
+        elCode.textContent = current.code;
+        elTitle.textContent = current.title;
+        elPrice.textContent = current.price || '';
+        elPrice.style.display = current.price ? '' : 'none';
+        elDesc.textContent = current.desc;
+        elEtsy.href = current.etsy;
+        elSpecs.innerHTML = '';
+        current.specs.forEach(function (s) {
+          var d = document.createElement('div');
+          d.className = 'pm-spec';
+          d.innerHTML = '<span class="k"></span><span class="v"></span>';
+          d.querySelector('.k').textContent = s.k;
+          d.querySelector('.v').textContent = s.v;
+          elSpecs.appendChild(d);
+        });
+        buildThumbs();
+        renderStage();
+        modal.hidden = false;
+        document.body.classList.add('pm-open');
+        modal.querySelector('.pm-x').focus();
+        document.addEventListener('keydown', onKey);
+      }
+
+      function close() {
+        var v = stage.querySelector('video');
+        if (v) { try { v.pause(); } catch (e) {} }
+        modal.hidden = true;
+        document.body.classList.remove('pm-open');
+        document.removeEventListener('keydown', onKey);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+        current = null;
+      }
+
+      function onKey(e) {
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowRight') go(1);
+        else if (e.key === 'ArrowLeft') go(-1);
+        else if (e.key === 'Tab') trap(e);
+      }
+      function trap(e) {
+        var f = Array.prototype.filter.call(
+          modal.querySelectorAll('button, a[href], video, [tabindex]:not([tabindex="-1"])'),
+          function (el) { return el.offsetParent !== null || el === document.activeElement; });
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+
+      prevBtn.addEventListener('click', function () { go(-1); });
+      nextBtn.addEventListener('click', function () { go(1); });
+      Array.prototype.forEach.call(closeEls, function (el) { el.addEventListener('click', close); });
+
+      /* swipe on the stage (touch) */
+      var sx = 0, sy = 0, sw = false;
+      stage.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) return;
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY; sw = true;
+      }, { passive: true });
+      stage.addEventListener('touchend', function (e) {
+        if (!sw) return; sw = false;
+        var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+      }, { passive: true });
+
+      /* delegated open — a genuine click on a product card (drag is swallowed
+         upstream by the carousel, so a scrub never reaches here).
+         The carousel calls setPointerCapture on pointerdown, which retargets the
+         resulting click to the root; so resolve the card by coordinates too. */
+      function cardFrom(e) {
+        var t = e.target && e.target.closest ? e.target.closest('[data-product]') : null;
+        if (!t && typeof e.clientX === 'number') {
+          var el = document.elementFromPoint(e.clientX, e.clientY);
+          t = el && el.closest ? el.closest('[data-product]') : null;
+        }
+        return t;
+      }
+      document.addEventListener('click', function (e) {
+        if (!modal.hidden) return;                 // ignore clicks while open
+        var t = cardFrom(e);
+        if (t) { e.preventDefault(); open(t.getAttribute('data-product')); }
       });
     })();
   })();

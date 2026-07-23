@@ -1,19 +1,20 @@
 # Fotos de productos
 
-Deja aquí las fotos reales de cada producto. Convención de nombres (el número
-final define el orden en que pasan en la galería del modal):
+Fotos reales de las piezas publicadas en el carrusel **Acquire**. Se cablean en
+`index.html` (tarjeta del carrusel + modal-galería).
+
+Convención (el número final define el orden en la galería del modal; `-01` es la
+que se ve en la tarjeta del carrusel):
 
 ```
-img/products/producto-1-01.jpg
-img/products/producto-1-02.jpg
-img/products/producto-1-03.jpg
-img/products/producto-2-01.jpg
-img/products/producto-2-02.jpg
-...
+p1-01.jpg … p1-04.jpg   # Producto 1 — Bauhaus Brutalist Concrete Wall Sculpture
+p1.mp4                  # video del producto 1
+p2-01.jpg … p2-04.jpg   # Producto 2 — Geometric Bauhaus Sculpture (grid)
+p2.mp4                  # video del producto 2
 ```
 
-- Formato: JPG o WebP.
-- Tamaño: lado largo ~1600 px es suficiente.
-- La primera foto (`-01`) es la que se ve en la tarjeta del carrusel.
+- Formato: JPG/WebP. Lado largo ~1600 px es suficiente.
+- El video entra como un slide más dentro de la galería (como en Etsy).
 
-Cuando las subas, avisa y se cablean en `index.html` (tarjeta + modal-galería).
+`ref-1.jpg` / `ref-2.jpg` son screenshots de las fichas de Etsy: **solo
+referencia**, no se muestran en el sitio.

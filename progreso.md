@@ -48,6 +48,40 @@ sesión, y las reglas de trabajo que seguimos.
 
 Cada entrada = un PR. Se anota de arriba (más reciente) hacia abajo.
 
+### 2026-07-23 — Dos productos reales + modal-galería — 🚧 EN RAMA (pendiente merge)
+_Rama `claude/tom-products-modal-gallery-cg229k`._
+Entran las **dos primeras piezas reales** de Tom al carrusel Acquire y se añade
+un **modal-galería centrado (lightbox)** que abre al hacer click en una tarjeta.
+- **Fotos reales** en `img/products/` (carpeta nueva; excepción a la regla #5 —
+  las fotos van como archivos, no en base64). Cada producto: 4 fotos + 1 video.
+  `ref-1/2.jpg` son screenshots de Etsy → solo referencia, no se publican.
+- **Dos tarjetas de producto** al **frente** del carrusel (7 en total: 2 reales +
+  5 placeholders; los placeholders se renumeran a PIECE 03–07). La tarjeta real
+  usa `<img>` (`object-fit: cover`, caja cuadrada como los placeholders) dentro de
+  un `<button.acq-open data-product>` con badge **VIEW ›** al hover/focus.
+  - **P1 — Bauhaus Brutalist Concrete Wall Sculpture** (RELIEF 01): €450,
+    352 × 594 × 40 mm, acabado Terracotta · Cream.
+  - **P2 — Geometric Bauhaus Sculpture** (GRID 01): acabado Terracotta · Blue ·
+    Grey. **Precio y dimensiones pendientes** de Adrián (la ficha de Etsy no los
+    mostraba); el modal omite el precio con gracia mientras tanto.
+- **Modal-galería** (`#productModal`, un solo diálogo reutilizable):
+  - Foto grande + **navegación manual**: flechas ‹ ›, teclado ← →, **swipe** en
+    móvil, **miniaturas** (la del video con ▶) y contador `n / total`.
+  - El **video** entra como un slide más (como en Etsy).
+  - Panel de ficha estilo "What to know": código, título, precio, tiles
+    (Dimensions · Finish · Material · Made to order), descripción y **Buy on Etsy**.
+  - Cierra con **✕ / Esc / click en el backdrop**; **focus atrapado** y devuelto a
+    la tarjeta al cerrar; bloquea el scroll del fondo. Respeta
+    `prefers-reduced-motion`.
+- **Apertura por delegación** para que las tarjetas **clonadas** del loop también
+  abran. Detalle clave: el carrusel hace `setPointerCapture` en `pointerdown`, lo
+  que **redirige el `click` al `<html>`** → se resuelve la tarjeta por
+  coordenadas (`elementFromPoint`), no solo por `e.target`.
+- Verificado con Playwright (Chromium) en desktop y móvil 390px: abre, navega
+  (flechas/teclado/miniaturas/swipe), video, cierra (Esc/backdrop), P2 sin precio,
+  sin scroll horizontal, cero errores de consola. Sigue siendo un solo
+  `index.html` (CSS/JS inline).
+
 ### 2026-07-23 — Acquire como carrusel infinito de piezas — ✅ MERGEADO (PR #15)
 _Rama `claude/progreso-acquire-section-o8m6ym` (reiniciada sobre `main` tras
 mergear el PR #14)._
